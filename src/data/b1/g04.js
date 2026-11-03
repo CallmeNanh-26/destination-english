@@ -1,0 +1,122 @@
+// Unit 4 – Grammar: Present perfect simple, present perfect continuous (Destination B1).
+export default {
+  id: 'b1-u04',
+  book: 'b1',
+  no: 4,
+  title: 'Present perfect simple, present perfect continuous',
+  titleVi: 'Hiện tại hoàn thành, hiện tại hoàn thành tiếp diễn',
+  blocks: [
+    { type: 'h', text: '1. Hiện tại hoàn thành (Present perfect simple)' },
+    { type: 'p', text: 'Cấu trúc: **have/has + V3 (past participle)**' },
+    { type: 'table', head: ['Khẳng định', 'Phủ định', 'Nghi vấn'], rows: [
+      ["I/you/we/they **have ('ve) learnt**", "I/you/we/they **haven't learnt**", '**Have** you **learnt**…?'],
+      ["he/she/it **has ('s) learnt**", "he/she/it **hasn't learnt**", '**Has** she **learnt**…?'],
+    ] },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Tình huống bắt đầu trong quá khứ và **vẫn còn** đến nay', 'Mrs Jenkins **has been** the head teacher for three years.'],
+      ['Hành động đã xong, **không nói thời điểm**', "I**'ve** already **read** that book."],
+      ['Hành động đã xong, quan trọng là **kết quả bây giờ**', "They**'ve** all **done** their homework."],
+      ['Trải nghiệm trong đời', '**Have** you **ever been** to Japan?'],
+    ] },
+    { type: 'table', head: ['Từ đi kèm', 'Ví dụ'], rows: [
+      ['**for** + khoảng thời gian', "She's taught here **for** over five years."],
+      ['**since** + mốc thời gian', 'Mr Gray has taught French here **since** 2006.'],
+      ['**just** (vừa mới)', "We've **just** done this exercise."],
+      ['**already** (đã… rồi)', "We've **already** done this exercise."],
+      ['**yet** (chưa / … chưa?) – cuối câu phủ định & nghi vấn', "We haven't checked the answers **yet**."],
+      ['**ever / never**', "Have you **ever** had guitar lessons? / I've **never** understood why…"],
+      ['**It’s the first time** + HTHT', "It's the first time we've watched a video in class."],
+    ] },
+    { type: 'warn', text: 'Có **thời điểm cụ thể trong quá khứ** (yesterday, last night, in 2020, ago) → dùng **quá khứ đơn**, không dùng HTHT.\n✗ I have done my homework last night. ✓ I **did** my homework last night.\nKhông có thời điểm, nhấn mạnh kết quả bây giờ → HTHT: ✓ I**’ve finished**! Can I go home now?' },
+
+    { type: 'h', text: '2. Hiện tại hoàn thành tiếp diễn (Present perfect continuous)' },
+    { type: 'p', text: 'Cấu trúc: **have/has + been + V-ing**' },
+    { type: 'table', head: ['Khẳng định', 'Phủ định', 'Nghi vấn'], rows: [
+      ["I/you/we/they **have been studying**", "**haven't been studying**", '**Have** you **been studying**…?'],
+      ["he/she/it **has been studying**", "**hasn't been studying**", '**Has** he **been studying**…?'],
+    ] },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Hành động kéo dài đến bây giờ (nhấn mạnh **quá trình / thời gian**)', "We**'ve been doing** grammar exercises for over an hour."],
+      ['Hành động vừa dừng, còn để lại dấu hiệu', "They're tired because they**'ve been working** so hard."],
+    ] },
+
+    { type: 'h', text: '3. So sánh HTHT và HTHT tiếp diễn' },
+    { type: 'table', head: ['HTHT đơn – nhấn mạnh KẾT QUẢ', 'HTHT tiếp diễn – nhấn mạnh QUÁ TRÌNH'], rows: [
+      ["She**'s written** an article. (đã viết xong)", "She**'s been writing** an article. (đang viết, chưa xong)"],
+      ["I**'ve read** three books this month. (số lượng)", "I**'ve been reading** all afternoon. (bao lâu)"],
+      ["How many cups **have** you **drunk**?", "How long **have** you **been waiting**?"],
+    ] },
+    { type: 'tip', text: 'Có **số lượng / bao nhiêu cái** → HTHT đơn. Có **bao lâu** (how long, all day, for hours) → thường HTHT tiếp diễn.\nStative verbs (know, like, have = sở hữu…) không dùng tiếp diễn: ✓ I**’ve known** her for years.' },
+
+    { type: 'h', text: '4. Lỗi người Việt hay mắc' },
+    { type: 'list', items: [
+      'Dùng hiện tại đơn thay HTHT với for/since: ✗ I live here for 5 years. → ✓ I**’ve lived / ’ve been living** here for 5 years.',
+      'Nhầm for/since: ✗ since 3 years → ✓ **for** 3 years / **since** 2022.',
+      'HTHT + thời điểm quá khứ: ✗ I have seen him yesterday. → ✓ I **saw** him yesterday.',
+      'Sai V3 bất quy tắc: ✗ I have went → ✓ I have **gone**; ✗ have wrote → ✓ have **written**.',
+    ] },
+    { type: 'tip', text: 'IELTS Part 1 rất hay hỏi “How long have you…?”. Trả lời: “I**’ve been living** in Hanoi **for** about six years, **ever since** I started university.”' },
+  ],
+  exercises: [
+    {
+      title: 'A. Chọn đáp án đúng',
+      instruction: 'Chọn đáp án đúng.',
+      items: [
+        { t: 'mcq', q: 'I ___ this film three times.', o: ['have seen', 'have been seeing', 'saw'], a: 0, ex: 'Số lần → HTHT đơn.' },
+        { t: 'mcq', q: 'She ___ for the bus for 40 minutes!', o: ['has waited', 'has been waiting', 'waits'], a: 1, ex: 'Nhấn mạnh thời gian kéo dài.' },
+        { t: 'mcq', q: 'We ___ to Hue last summer.', o: ['have gone', 'went', 'have been going'], a: 1, ex: 'last summer → quá khứ đơn.' },
+        { t: 'mcq', q: "I've known him ___ 2019.", o: ['for', 'since', 'ago'], a: 1 },
+        { t: 'mcq', q: "They've been friends ___ ten years.", o: ['for', 'since', 'during'], a: 0 },
+        { t: 'mcq', q: 'Have you finished your essay ___?', o: ['already', 'yet', 'just'], a: 1 },
+        { t: 'mcq', q: "It's the first time I ___ sushi.", o: ['eat', 'ate', 'have eaten'], a: 2 },
+        { t: 'mcq', q: 'Why are your hands so dirty? – I ___ in the garden.', o: ['have worked', 'have been working', 'worked'], a: 1, ex: 'Hành động vừa dừng, còn dấu hiệu.' },
+        { t: 'mcq', q: 'How many emails ___ this morning?', o: ['have you written', 'have you been writing', 'are you writing'], a: 0 },
+        { t: 'mcq', q: 'I ___ her for years.', o: ['have known', 'have been knowing', 'know'], a: 0, ex: 'know là stative verb.' },
+      ],
+    },
+    {
+      title: 'B. Chia động từ trong ngoặc',
+      instruction: 'HTHT đơn hoặc HTHT tiếp diễn (có thể dùng dạng viết tắt).',
+      items: [
+        { t: 'gap', q: 'I ___ (just/finish) my homework.', a: ['have just finished', "'ve just finished"] },
+        { t: 'gap', q: 'She ___ (learn) Korean since she was twelve.', a: ['has been learning', "'s been learning", 'has learnt', 'has learned'] },
+        { t: 'gap', q: 'We ___ (not/decide) where to go yet.', a: ["haven't decided", 'have not decided'] },
+        { t: 'gap', q: 'Look! Someone ___ (break) the window.', a: ['has broken', "'s broken"] },
+        { t: 'gap', q: 'You look tired. ___ you ___ (run)? (viết 2 phần, cách nhau …)', a: ['have … been running', 'have been running'] },
+        { t: 'gap', q: 'He ___ (never/be) abroad.', a: ['has never been', "'s never been"] },
+        { t: 'gap', q: 'I ___ (read) this book all week and I’m only on page 50.', a: ['have been reading', "'ve been reading"] },
+        { t: 'gap', q: 'They ___ (already/sell) all the tickets.', a: ['have already sold', "'ve already sold"] },
+        { t: 'gap', q: 'How long ___ you ___ (live) here? (viết 2 phần, cách nhau …)', a: ['have … lived', 'have lived', 'have … been living', 'have been living'] },
+        { t: 'gap', q: 'My phone ___ (ring) all morning – it’s driving me crazy!', a: ['has been ringing', "'s been ringing"] },
+      ],
+    },
+    {
+      title: 'C. Tìm và sửa lỗi sai',
+      instruction: 'Mỗi câu có 1 lỗi. Viết lại cả câu cho đúng.',
+      items: [
+        { t: 'fix', q: 'I live in Hanoi since 2020.', a: ["I've lived in Hanoi since 2020.", 'I have lived in Hanoi since 2020.', "I've been living in Hanoi since 2020.", 'I have been living in Hanoi since 2020.'] },
+        { t: 'fix', q: 'I have seen him yesterday.', a: ['I saw him yesterday.'] },
+        { t: 'fix', q: 'She has studied English since five years.', a: ['She has studied English for five years.', 'She has been studying English for five years.'] },
+        { t: 'fix', q: 'Have you ever went to Singapore?', a: ['Have you ever been to Singapore?', 'Have you ever gone to Singapore?'] },
+        { t: 'fix', q: "I haven't finished my project already.", a: ["I haven't finished my project yet."] },
+        { t: 'fix', q: "I've been knowing Lan for ages.", a: ["I've known Lan for ages.", 'I have known Lan for ages.'] },
+        { t: 'fix', q: 'He has wrote three novels.', a: ['He has written three novels.'] },
+        { t: 'fix', q: 'How long are you waiting here?', a: ['How long have you been waiting here?'] },
+      ],
+    },
+    {
+      title: 'D. Dịch câu Việt → Anh (AI chấm)',
+      instruction: 'Chú ý chọn HTHT, HTHT tiếp diễn hay quá khứ đơn.',
+      items: [
+        { t: 'tr', vi: 'Tôi đã học tiếng Anh được hơn năm năm rồi.', ref: "I've been learning English for over five years.", focus: 'present perfect continuous + for' },
+        { t: 'tr', vi: 'Bạn đã bao giờ thi IELTS chưa?', ref: 'Have you ever taken the IELTS exam?', focus: 'ever + experience' },
+        { t: 'tr', vi: 'Tôi vừa mới nộp bài luận cho giáo viên.', ref: "I've just handed in my essay to the teacher.", focus: 'just' },
+        { t: 'tr', vi: 'Đây là lần đầu tiên tôi đến Hà Nội.', ref: "It's the first time I've been to Hanoi.", focus: "it's the first time" },
+        { t: 'tr', vi: 'Cô ấy đã viết ba bài báo trong tuần này.', ref: "She's written three articles this week.", focus: 'result / quantity' },
+        { t: 'tr', vi: 'Mắt bạn đỏ quá. Bạn vừa khóc à?', ref: 'Your eyes are so red. Have you been crying?', focus: 'evidence of recent activity' },
+        { t: 'tr', vi: 'Chúng tôi chưa quyết định sẽ học ngành gì.', ref: "We haven't decided what to study yet.", focus: 'yet' },
+        { t: 'tr', vi: 'Tôi đã gặp cô ấy ở thư viện hai ngày trước.', ref: 'I met her at the library two days ago.', focus: 'past simple vs present perfect' },
+      ],
+    },
+  ],
+};

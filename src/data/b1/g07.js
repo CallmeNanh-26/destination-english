@@ -1,0 +1,97 @@
+// Unit 7 – Grammar: Future time (present continuous, will, be going to, present simple) (Destination B1).
+export default {
+  id: 'b1-u07',
+  book: 'b1',
+  no: 7,
+  title: 'Future time (present continuous, will, be going to, present simple)',
+  titleVi: 'Diễn tả tương lai: hiện tại tiếp diễn, will, be going to, hiện tại đơn',
+  blocks: [
+    { type: 'p', text: 'Tiếng Anh có nhiều cách nói về tương lai. Việc chọn cách nào phụ thuộc vào **ý định, kế hoạch, dự đoán** hay **lịch trình**.' },
+    { type: 'table', head: ['Cấu trúc', 'Dùng khi', 'Ví dụ'], rows: [
+      ['**Hiện tại tiếp diễn**', 'Kế hoạch **đã sắp xếp** (có hẹn, đã đặt vé, có thời gian/địa điểm)', "We**'re driving** to Berlin this weekend."],
+      ['**be going to**', '**Ý định** đã quyết từ trước', "I**'m going to** become an explorer when I grow up."],
+      ['**be going to**', 'Dự đoán **có căn cứ** nhìn thấy', "Look at those clouds! It**'s going to** rain."],
+      ['**will**', 'Quyết định **ngay lúc nói**', "I know! I**'ll** go to China this summer."],
+      ['**will**', 'Dự đoán dựa trên **ý kiến/niềm tin**', "You**'ll** have a great time in the Bahamas."],
+      ['**will**', 'Lời đề nghị, hứa, yêu cầu', "We**'ll** help you get ready. / **Will** you help me?"],
+      ['**will / be going to**', 'Sự thật về tương lai', 'The new airport **will be / is going to be** the biggest in Europe.'],
+      ['**Hiện tại đơn**', '**Lịch trình, thời gian biểu** cố định', 'My plane **leaves** at six.'],
+    ] },
+    { type: 'warn', text: '✗ I’m becoming an explorer when I grow up. (ý định → be going to)\n✗ Do you think you’re enjoying your trip next week? (dự đoán → will / be going to)\n✗ We’ll visit my grandma this weekend. (đã sắp xếp → We**’re visiting** …)' },
+    { type: 'tip', text: 'Lời đề nghị dạng câu hỏi với I/we → dùng **Shall**: **Shall** I drive you to the airport? / **Shall** we go out tonight?' },
+
+    { type: 'h', text: 'Mẹo phân biệt nhanh' },
+    { type: 'list', items: [
+      'Có **lịch hẹn cụ thể** (đặt vé, hẹn bạn) → **be + V-ing**.',
+      'Đã **định làm** nhưng chưa sắp xếp → **be going to**.',
+      'Vừa **nảy ra** ý định ngay bây giờ → **will**: “The phone’s ringing.” – “I**’ll** get it!”',
+      'Thấy **dấu hiệu** trước mắt → **going to**: “Watch out! You**’re going to** fall!”',
+      'Sau **when, as soon as, before, after, until, if** khi nói về tương lai → dùng **hiện tại đơn**: I’ll call you **when I arrive** (✗ when I will arrive).',
+    ] },
+
+    { type: 'h', text: 'Lỗi người Việt hay mắc' },
+    { type: 'list', items: [
+      'Dùng “will” cho mọi thứ trong tương lai (vì tiếng Việt chỉ có “sẽ”).',
+      'Thiếu “be”: ✗ I going to study abroad. → ✓ I**’m going to** study abroad.',
+      'Dùng will sau when/if: ✗ When I will finish university… → ✓ When I **finish** university…',
+    ] },
+    { type: 'tip', text: 'IELTS Part 1/3 hay hỏi về kế hoạch tương lai. Dùng đa dạng: “I**’m taking** my IELTS test in June, and after that I**’m going to** apply for a scholarship. Hopefully I**’ll** be studying abroad by next year.”' },
+  ],
+  exercises: [
+    {
+      title: 'A. Chọn đáp án đúng',
+      instruction: 'Chọn cách diễn đạt tương lai phù hợp nhất.',
+      items: [
+        { t: 'mcq', q: "I've bought the tickets. We ___ to Phu Quoc on Friday.", o: ['will fly', 'are flying', 'fly'], a: 1, ex: 'Đã sắp xếp (mua vé).' },
+        { t: 'mcq', q: 'Look at that car! It ___ crash!', o: ["'s going to", "'ll", 'crashes'], a: 0, ex: 'Có dấu hiệu trước mắt.' },
+        { t: 'mcq', q: "– I'm thirsty. – Wait, I ___ you some water.", o: ["'m getting", "'ll get", 'get'], a: 1, ex: 'Quyết định ngay lúc nói.' },
+        { t: 'mcq', q: 'The train ___ at 7.45 tomorrow morning.', o: ['leaves', 'is going to leave', 'will be leaving'], a: 0, ex: 'Lịch trình.' },
+        { t: 'mcq', q: "I think robots ___ most jobs in the future.", o: ['are doing', 'will do', 'do'], a: 1, ex: 'Dự đoán theo ý kiến (I think).' },
+        { t: 'mcq', q: '___ I open the window?', o: ['Will', 'Shall', 'Am'], a: 1 },
+        { t: 'mcq', q: "She ___ study medicine – she decided last year.", o: ["'s going to", "'ll", 'studies'], a: 0, ex: 'Ý định đã có từ trước.' },
+        { t: 'mcq', q: "I'll phone you as soon as I ___ home.", o: ['will get', 'get', 'am getting'], a: 1, ex: 'Sau as soon as dùng hiện tại đơn.' },
+        { t: 'mcq', q: "What ___ this evening? – I'm meeting Lan at 7.", o: ['will you do', 'are you doing', 'do you do'], a: 1 },
+        { t: 'mcq', q: "Don't worry, I ___ tell anyone your secret.", o: ["won't", "'m not going", "don't"], a: 0, ex: 'Lời hứa.' },
+      ],
+    },
+    {
+      title: 'B. Chia động từ',
+      instruction: 'Dùng will, be going to, hiện tại tiếp diễn hoặc hiện tại đơn.',
+      items: [
+        { t: 'gap', q: 'The film ___ (start) at 8.30, so hurry up!', a: ['starts'] },
+        { t: 'gap', q: "I ___ (meet) my teacher at 3 p.m. tomorrow – it's in my diary.", a: ['am meeting', "'m meeting"] },
+        { t: 'gap', q: 'Be careful! You ___ (drop) those plates!', a: ['are going to drop', "'re going to drop"] },
+        { t: 'gap', q: "– The phone's ringing. – OK, I ___ (answer) it.", a: ['will answer', "'ll answer"] },
+        { t: 'gap', q: 'When I ___ (finish) this course, I want to travel.', a: ['finish'] },
+        { t: 'gap', q: 'I promise I ___ (not/be) late again.', a: ["won't be", 'will not be'] },
+        { t: 'gap', q: 'My brother ___ (buy) a new laptop – he has been saving for months.', a: ['is going to buy', "'s going to buy"] },
+        { t: 'gap', q: 'I think it ___ (be) sunny tomorrow.', a: ['will be', "'ll be"] },
+      ],
+    },
+    {
+      title: 'C. Tìm và sửa lỗi sai',
+      instruction: 'Mỗi câu có 1 lỗi. Viết lại cả câu cho đúng.',
+      items: [
+        { t: 'fix', q: 'I going to visit my grandparents next week.', a: ["I'm going to visit my grandparents next week.", 'I am going to visit my grandparents next week.'] },
+        { t: 'fix', q: 'When I will finish university, I will look for a job.', a: ['When I finish university, I will look for a job.', "When I finish university, I'll look for a job."] },
+        { t: 'fix', q: 'Will I carry your bag?', a: ['Shall I carry your bag?'] },
+        { t: 'fix', q: "I'm becoming a doctor when I grow up.", a: ["I'm going to become a doctor when I grow up.", 'I am going to become a doctor when I grow up.'] },
+        { t: 'fix', q: "We'll have a party on Saturday – we've already sent the invitations.", a: ["We're having a party on Saturday – we've already sent the invitations.", 'We are having a party on Saturday – we have already sent the invitations.', "We're having a party on Saturday - we've already sent the invitations."] },
+        { t: 'fix', q: 'The bus is leaving at 6 every morning.', a: ['The bus leaves at 6 every morning.'] },
+      ],
+    },
+    {
+      title: 'D. Dịch câu Việt → Anh (AI chấm)',
+      instruction: 'Chọn đúng cách diễn đạt tương lai.',
+      items: [
+        { t: 'tr', vi: 'Tôi sẽ thi IELTS vào tháng Sáu – tôi đã đăng ký rồi.', ref: "I'm taking the IELTS exam in June – I've already registered.", focus: 'present continuous for arrangements' },
+        { t: 'tr', vi: 'Nhìn bầu trời kìa! Trời sắp mưa rồi.', ref: "Look at the sky! It's going to rain.", focus: 'going to + evidence' },
+        { t: 'tr', vi: 'Bạn có cần giúp không? Để tôi mang túi cho bạn nhé.', ref: "Do you need help? I'll carry your bag for you.", focus: 'will – offer' },
+        { t: 'tr', vi: 'Sau khi tốt nghiệp, tôi định làm việc cho một công ty nước ngoài.', ref: "After I graduate, I'm going to work for a foreign company.", focus: 'going to – intention, after + present' },
+        { t: 'tr', vi: 'Chuyến bay của chúng tôi cất cánh lúc 10 giờ sáng mai.', ref: 'Our flight takes off at 10 a.m. tomorrow.', focus: 'present simple – timetable' },
+        { t: 'tr', vi: 'Tôi nghĩ trong tương lai mọi người sẽ làm việc ở nhà nhiều hơn.', ref: 'I think people will work from home more in the future.', focus: 'will – prediction' },
+        { t: 'tr', vi: 'Tôi sẽ gọi cho bạn ngay khi tôi đến nơi.', ref: "I'll call you as soon as I arrive.", focus: 'as soon as + present simple' },
+      ],
+    },
+  ],
+};

@@ -1,0 +1,132 @@
+// Unit 1 – Grammar: Present simple, present continuous, stative verbs (Destination B1).
+// Blocks: h (heading), p, table {head, rows}, list, tip, warn. **bold** is rendered.
+export default {
+  id: 'b1-u01',
+  book: 'b1',
+  no: 1,
+  title: 'Present simple, present continuous, stative verbs',
+  titleVi: 'Hiện tại đơn, hiện tại tiếp diễn, động từ trạng thái',
+  blocks: [
+    { type: 'h', text: '1. Hiện tại đơn (Present simple)' },
+    { type: 'table', head: ['', 'Khẳng định', 'Phủ định', 'Nghi vấn'], rows: [
+      ['I/you/we/they', 'I **play**', "I **don't play**", '**Do** you **play**…?'],
+      ['he/she/it', 'She **plays**', "She **doesn't play**", '**Does** she **play**…?'],
+    ] },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Thói quen, việc lặp lại', 'Marsha **goes** to dance lessons every Saturday.'],
+      ['Tình huống lâu dài, cố định', 'He **works** at the cinema.'],
+      ['Trạng thái (cảm xúc, suy nghĩ, sở hữu)', 'I **like** the new James Bond film.'],
+      ['Sự thật hiển nhiên', 'You **play** chess with 32 pieces.'],
+      ['Lịch trình, thời gian biểu cố định', 'The match **starts** at 3 p.m.'],
+    ] },
+    { type: 'p', text: 'Dấu hiệu: **always, usually, often, sometimes, rarely, never**, every day/week, once/twice a week, three times a month…' },
+    { type: 'tip', text: 'Trạng từ tần suất đứng **trước động từ thường** nhưng **sau động từ to be**: I **often play** football. / I **am often** late.' },
+    { type: 'list', items: [
+      'Thêm **-es** sau -o, -s, -sh, -ch, -x, -z: go → goes, watch → watches, fix → fixes.',
+      'Phụ âm + y → **-ies**: study → studies; nguyên âm + y giữ nguyên: play → plays.',
+      'have → **has**; be → am/is/are.',
+    ] },
+
+    { type: 'h', text: '2. Hiện tại tiếp diễn (Present continuous)' },
+    { type: 'table', head: ['', 'Khẳng định', 'Phủ định', 'Nghi vấn'], rows: [
+      ['I', "I**'m playing**", "I**'m not playing**", '**Am** I **playing**…?'],
+      ['he/she/it', "She**'s playing**", "She **isn't playing**", '**Is** she **playing**…?'],
+      ['you/we/they', "They**'re playing**", "They **aren't playing**", '**Are** they **playing**…?'],
+    ] },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Hành động đang xảy ra lúc nói', 'Jan **is watching** a DVD upstairs.'],
+      ['Tình huống tạm thời', 'She **is working** at the museum until the end of the month.'],
+      ['Xu hướng đang thay đổi', 'More and more people **are taking up** esports.'],
+      ['Thói quen gây khó chịu (với always)', 'My brother **is always borrowing** my CDs without asking!'],
+      ['Kế hoạch tương lai đã sắp xếp (học kỹ ở Unit 7)', "I**'m meeting** Tom tonight."],
+    ] },
+    { type: 'p', text: 'Dấu hiệu: **now, right now, at the moment, today, this week/month, currently, Look!, Listen!**' },
+    { type: 'list', items: [
+      'Bỏ -e: make → making; nhân đôi phụ âm cuối (1 âm tiết, phụ âm–nguyên âm–phụ âm): run → running, swim → swimming.',
+      '-ie → -ying: lie → lying, die → dying.',
+    ] },
+
+    { type: 'h', text: '3. Động từ trạng thái (Stative verbs)' },
+    { type: 'p', text: 'Động từ trạng thái diễn tả **cảm xúc, suy nghĩ, giác quan, sở hữu** – không phải hành động – nên thường **không dùng ở thì tiếp diễn**.' },
+    { type: 'table', head: ['Nhóm', 'Động từ'], rows: [
+      ['Cảm xúc', 'like, love, hate, prefer, want, need'],
+      ['Suy nghĩ', 'know, believe, understand, think (= cho rằng), remember, mean'],
+      ['Giác quan / bề ngoài', 'see, hear, taste, smell, seem, appear, look (= trông có vẻ)'],
+      ['Sở hữu / tồn tại', 'have (= sở hữu), belong to, own, include, be'],
+    ] },
+    { type: 'p', text: '✓ I **like** reading books. ✗ I am liking reading books.' },
+    { type: 'warn', text: 'Một số động từ có **2 nghĩa**: nghĩa trạng thái → thì đơn; nghĩa hành động → được dùng tiếp diễn.\n• What do you **think** of his song? (ý kiến) / I\'m **thinking** about the match. (đang suy nghĩ)\n• She **has** two brothers. (sở hữu) / She\'s **having** lunch. (đang ăn)\n• This soup **tastes** great. (có vị) / He\'s **tasting** the soup. (đang nếm)\n• You **are** silly. (tính cách) / You\'re **being** silly. (đang cư xử ngớ ngẩn – tạm thời)' },
+
+    { type: 'h', text: '4. Lỗi người Việt hay mắc' },
+    { type: 'list', items: [
+      'Quên **-s** ngôi thứ ba: ✗ She play tennis. → ✓ She **plays** tennis. (khi nói cũng cần phát âm rõ âm /s/ /z/ /ɪz/ cuối!)',
+      'Dùng **be + V** cho thói quen: ✗ I am go to school every day. → ✓ I **go** to school every day.',
+      'Dùng tiếp diễn với stative verb: ✗ I am knowing the answer. → ✓ I **know** the answer.',
+      'Câu hỏi thiếu trợ động từ: ✗ Where you live? → ✓ Where **do** you live?',
+      '“Does” + V-s: ✗ Does he plays…? → ✓ Does he **play**…?',
+    ] },
+    { type: 'tip', text: 'IELTS Speaking Part 1 dùng hiện tại đơn rất nhiều. Hãy kết hợp cả hai thì để thể hiện độ linh hoạt: “I usually **play** badminton at weekends, but these days I**\'m training** for a half-marathon, so I**\'m spending** more time running.”' },
+  ],
+  exercises: [
+    {
+      title: 'A. Chọn thì đúng',
+      instruction: 'Chọn đáp án đúng.',
+      items: [
+        { t: 'mcq', q: 'Water ___ at 100 degrees Celsius.', o: ['boils', 'is boiling'], a: 0, ex: 'Sự thật hiển nhiên → hiện tại đơn.' },
+        { t: 'mcq', q: "Shh! The baby ___ .", o: ['sleeps', 'is sleeping'], a: 1, ex: 'Đang xảy ra lúc nói.' },
+        { t: 'mcq', q: 'I ___ what you mean.', o: ['understand', 'am understanding'], a: 0, ex: 'understand là stative verb.' },
+        { t: 'mcq', q: 'My cousin ___ with us until he finds a flat.', o: ['stays', 'is staying'], a: 1, ex: 'Tình huống tạm thời.' },
+        { t: 'mcq', q: 'How often ___ to the gym?', o: ['do you go', 'are you going'], a: 0, ex: 'How often → thói quen.' },
+        { t: 'mcq', q: 'This cake ___ delicious!', o: ['tastes', 'is tasting'], a: 0, ex: 'taste = có vị → trạng thái.' },
+        { t: 'mcq', q: "He's always ___ his phone at dinner – it's so annoying!", o: ['checks', 'checking'], a: 1, ex: 'always + tiếp diễn = thói quen gây khó chịu.' },
+        { t: 'mcq', q: 'This bike ___ to my brother.', o: ['belongs', 'is belonging'], a: 0 },
+        { t: 'mcq', q: "We ___ about moving to Da Nang next year.", o: ['think', 'are thinking'], a: 1, ex: 'think = đang cân nhắc (hành động).' },
+        { t: 'mcq', q: 'The first train ___ at 5.30 every morning.', o: ['leaves', 'is leaving'], a: 0, ex: 'Lịch trình cố định.' },
+      ],
+    },
+    {
+      title: 'B. Chia động từ trong ngoặc',
+      instruction: 'Viết dạng đúng (hiện tại đơn hoặc hiện tại tiếp diễn). Dùng dạng viết tắt hay đầy đủ đều được.',
+      items: [
+        { t: 'gap', q: 'Look! Those children ___ (play) football in the rain.', a: ['are playing', "'re playing"] },
+        { t: 'gap', q: 'My dad ___ (not/like) folk music.', a: ["doesn't like", 'does not like'] },
+        { t: 'gap', q: 'Lan ___ (train) for a marathon this month, so she runs every morning.', a: ['is training', "'s training"] },
+        { t: 'gap', q: '___ your brother ___ (support) any football team? (viết 2 phần, cách nhau bằng dấu …)', a: ['does … support', 'does...support', 'does support', 'does…support'] },
+        { t: 'gap', q: 'I ___ (not/understand) the rules of this game.', a: ["don't understand", 'do not understand'] },
+        { t: 'gap', q: 'Prices ___ (rise) quickly at the moment.', a: ['are rising', "'re rising"] },
+        { t: 'gap', q: 'She ___ (have) a shower right now – can she call you back?', a: ['is having', "'s having"] },
+        { t: 'gap', q: 'The referee usually ___ (blow) the whistle to start the match.', a: ['blows'] },
+        { t: 'gap', q: 'I ___ (need) a new racket – this one is broken.', a: ['need'] },
+        { t: 'gap', q: 'Why ___ you ___ (wear) a coat? It’s really hot today! (viết 2 phần, cách nhau bằng …)', a: ['are … wearing', 'are...wearing', 'are wearing', 'are…wearing'] },
+      ],
+    },
+    {
+      title: 'C. Tìm và sửa lỗi sai',
+      instruction: 'Mỗi câu có 1 lỗi. Viết lại cả câu cho đúng.',
+      items: [
+        { t: 'fix', q: 'She play tennis every weekend.', a: ['She plays tennis every weekend.'], ex: 'Ngôi thứ 3 số ít → plays.' },
+        { t: 'fix', q: 'I am knowing the answer.', a: ['I know the answer.'], ex: 'know là stative verb.' },
+        { t: 'fix', q: 'Where you live?', a: ['Where do you live?'], ex: 'Thiếu trợ động từ do.' },
+        { t: 'fix', q: 'Does he plays the guitar?', a: ['Does he play the guitar?'], ex: 'Sau does dùng V nguyên mẫu.' },
+        { t: 'fix', q: 'I am go to the gym every day.', a: ['I go to the gym every day.'], ex: 'Thói quen → hiện tại đơn, không dùng be + V.' },
+        { t: 'fix', q: 'Look! It snows.', a: ["Look! It's snowing.", 'Look! It is snowing.'], ex: 'Look! → đang xảy ra.' },
+        { t: 'fix', q: 'He is always late for training. He never is on time.', a: ['He is always late for training. He is never on time.', "He is always late for training. He's never on time."], ex: 'Trạng từ tần suất đứng sau to be.' },
+        { t: 'fix', q: 'This book is belonging to my teacher.', a: ['This book belongs to my teacher.'], ex: 'belong to là stative verb.' },
+      ],
+    },
+    {
+      title: 'D. Dịch câu Việt → Anh (AI chấm)',
+      instruction: 'Dịch sang tiếng Anh, chú ý chọn đúng thì.',
+      items: [
+        { t: 'tr', vi: 'Tôi thường đi bơi hai lần một tuần, nhưng tuần này tôi đang bị ốm.', ref: "I usually go swimming twice a week, but this week I'm ill.", focus: 'present simple vs continuous, frequency' },
+        { t: 'tr', vi: 'Hiện tại anh ấy đang sống với bố mẹ cho đến khi tìm được căn hộ mới.', ref: "He's living with his parents at the moment until he finds a new flat.", focus: 'temporary situation' },
+        { t: 'tr', vi: 'Bạn nghĩ gì về bộ phim mới đó?', ref: 'What do you think of that new film?', focus: 'think (stative)' },
+        { t: 'tr', vi: 'Tôi đang nghĩ về việc bắt đầu học piano.', ref: "I'm thinking about taking up the piano.", focus: 'think (action) + take up' },
+        { t: 'tr', vi: 'Em trai tôi lúc nào cũng mượn đồ của tôi mà không hỏi!', ref: "My brother is always borrowing my things without asking!", focus: 'always + continuous' },
+        { t: 'tr', vi: 'Cô ấy không thích nhạc cổ điển; cô ấy thích nhạc pop hơn.', ref: "She doesn't like classical music; she prefers pop.", focus: 'stative verbs' },
+        { t: 'tr', vi: 'Ngày càng nhiều người trẻ đang chơi thể thao điện tử.', ref: 'More and more young people are playing esports.', focus: 'changing trends' },
+        { t: 'tr', vi: 'Trận đấu bắt đầu lúc 7 giờ tối, vì vậy đừng đến muộn.', ref: "The match starts at 7 p.m., so don't be late.", focus: 'timetables' },
+      ],
+    },
+  ],
+};

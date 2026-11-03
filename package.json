@@ -1,0 +1,24 @@
+{
+  "name": "destination-english",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "audio": "node scripts/gen-audio.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "ts-fsrs": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "https-proxy-agent": "^7.0.6",
+    "msedge-tts": "^2.0.0",
+    "vite": "^5.4.11"
+  }
+}

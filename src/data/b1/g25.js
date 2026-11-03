@@ -1,0 +1,95 @@
+// Unit 25 – Grammar: So and such, too and enough (Destination B1).
+export default {
+  id: 'b1-u25',
+  book: 'b1',
+  no: 25,
+  title: 'So and such, too and enough',
+  titleVi: 'So / such … that, too / enough',
+  blocks: [
+    { type: 'h', text: '1. so … that / such … that (quá … đến nỗi)' },
+    { type: 'p', text: 'Diễn tả **kết quả** của một tình huống. “that” có thể lược bỏ trong văn nói.' },
+    { type: 'table', head: ['Cấu trúc', 'Ví dụ'], rows: [
+      ['**so + tính từ** + that', 'Al is **so good that** he was made manager.'],
+      ['**so + trạng từ** + that', 'Al works **so well that** he was made manager.'],
+      ['**so many / much + danh từ** + that', 'Al sells **so many cars that** he was made manager.'],
+      ['**such + a/an + tính từ + danh từ số ít** + that', 'Al is **such a good worker that** he was made manager.'],
+      ['**such + tính từ + danh từ số nhiều/không đếm được** + that', 'Al gets **such good results that** he was made manager.'],
+      ['**such a lot of + danh từ** + that', 'He makes **such a lot of money** that…'],
+    ] },
+    { type: 'tip', text: 'Mẹo: **so** đi với tính từ/trạng từ **đứng một mình**; **such** đi với **danh từ** (có thể có tính từ đứng trước).\nThe film was **so** boring. / It was **such a** boring film.' },
+
+    { type: 'h', text: '2. too và enough' },
+    { type: 'p', text: '**too** = quá (mức, mang nghĩa **tiêu cực**). **enough** = đủ.' },
+    { type: 'table', head: ['Cấu trúc', 'Ví dụ'], rows: [
+      ['**too + tính từ** (+ to V)', "It's **too cold** to work in the garden."],
+      ['**tính từ + enough** (+ to V)', "Carol isn't **patient enough** to work as a teacher."],
+      ['**too many / much + danh từ** (+ to V)', 'Jonty works **too many hours** to have any hobbies.'],
+      ['**enough + danh từ** (+ to V)', "We don't have **enough money** to pay our bills."],
+      ['**too + trạng từ** (+ to V)', 'I got there **too late** to see the manager.'],
+      ['**trạng từ + enough** (+ to V)', 'Jack worked **quickly enough** to finish early.'],
+    ] },
+    { type: 'warn', text: '• **too** ≠ **very**. Chỉ dùng too khi có ý **tiêu cực / không làm được**:\n✓ I’ve got **too** much work. I can’t come out. ✗ This job is great because you get paid too much money. (→ a lot of money)\n• **enough** đứng **sau tính từ/trạng từ** nhưng **trước danh từ**:\n✓ old **enough** ✗ enough old · ✓ **enough** money ✗ money enough\n• Thêm **for + người**: It’s too hot **for me** in this office. / You’re not old enough **for** the army.' },
+
+    { type: 'h', text: 'Lỗi người Việt hay mắc' },
+    { type: 'list', items: [
+      '✗ It was so a good film → ✓ It was **such a** good film.',
+      '✗ such beautiful → ✓ **so** beautiful (không có danh từ).',
+      '✗ This phone is too good! (khen) → ✓ This phone is **really / very** good!',
+      '✗ He is enough tall → ✓ He is tall **enough**.',
+    ] },
+    { type: 'tip', text: 'IELTS Writing Task 2: “Many cities are **so** crowded **that** public services cannot cope.” / “Young people often do not have **enough** experience **to** make such decisions.” – cách nối nguyên nhân – kết quả tự nhiên.' },
+  ],
+  exercises: [
+    {
+      title: 'A. Chọn đáp án đúng',
+      instruction: 'Chọn đáp án đúng.',
+      items: [
+        { t: 'mcq', q: 'The test was ___ difficult that nobody passed.', o: ['so', 'such', 'too'], a: 0 },
+        { t: 'mcq', q: 'It was ___ a beautiful day that we went to the beach.', o: ['so', 'such', 'too'], a: 1 },
+        { t: 'mcq', q: 'He’s not ___ to drive. He’s only 15.', o: ['enough old', 'old enough', 'too old'], a: 1 },
+        { t: 'mcq', q: 'This coffee is ___ hot to drink.', o: ['so', 'too', 'enough'], a: 1 },
+        { t: 'mcq', q: 'There were ___ people that we couldn’t get in.', o: ['so many', 'such many', 'too much'], a: 0 },
+        { t: 'mcq', q: 'They are ___ nice people.', o: ['so', 'such', 'such a'], a: 1 },
+        { t: 'mcq', q: 'We don’t have ___ to buy a new car.', o: ['money enough', 'enough money', 'too money'], a: 1 },
+        { t: 'mcq', q: 'She spoke ___ quickly that I didn’t understand.', o: ['so', 'such', 'too'], a: 0 },
+        { t: 'mcq', q: 'I’ve eaten ___ much. I feel sick.', o: ['so', 'too', 'enough'], a: 1 },
+        { t: 'mcq', q: 'Is the room big ___ for ten people?', o: ['too', 'enough', 'so'], a: 1 },
+      ],
+    },
+    {
+      title: 'B. Viết lại câu',
+      instruction: 'Viết lại câu dùng từ trong ngoặc, giữ nguyên nghĩa.',
+      items: [
+        { t: 'fix', q: 'The film was very boring, so I fell asleep. (such)', a: ['It was such a boring film that I fell asleep.'] },
+        { t: 'fix', q: 'The bag was very heavy, so I couldn’t carry it. (too)', a: ['The bag was too heavy to carry.', 'The bag was too heavy for me to carry.'] },
+        { t: 'fix', q: 'He isn’t tall, so he can’t reach the shelf. (enough)', a: ["He isn't tall enough to reach the shelf.", 'He is not tall enough to reach the shelf.'] },
+        { t: 'fix', q: 'She is a very kind person. Everyone likes her. (so)', a: ['She is so kind that everyone likes her.'] },
+        { t: 'fix', q: 'There was a lot of traffic, so we were late. (so much)', a: ['There was so much traffic that we were late.'] },
+        { t: 'fix', q: 'I’m very tired. I can’t go out tonight. (too)', a: ["I'm too tired to go out tonight.", 'I am too tired to go out tonight.'] },
+      ],
+    },
+    {
+      title: 'C. Tìm và sửa lỗi sai',
+      instruction: 'Mỗi câu có 1 lỗi. Viết lại cả câu cho đúng.',
+      items: [
+        { t: 'fix', q: 'It was so a good party that nobody wanted to leave.', a: ['It was such a good party that nobody wanted to leave.'] },
+        { t: 'fix', q: "You're not enough old to watch this film.", a: ["You're not old enough to watch this film.", 'You are not old enough to watch this film.'] },
+        { t: 'fix', q: 'This dress is too beautiful – I love it!', a: ['This dress is very beautiful – I love it!', 'This dress is so beautiful – I love it!', 'This dress is really beautiful – I love it!'] },
+        { t: 'fix', q: 'We have such many problems.', a: ['We have so many problems.'] },
+        { t: 'fix', q: 'I don’t have time enough to finish.', a: ["I don't have enough time to finish."] },
+      ],
+    },
+    {
+      title: 'D. Dịch câu Việt → Anh (AI chấm)',
+      instruction: 'Dùng so/such … that, too, enough.',
+      items: [
+        { t: 'tr', vi: 'Bài thi khó đến nỗi một nửa lớp trượt.', ref: 'The exam was so difficult that half the class failed.', focus: 'so … that' },
+        { t: 'tr', vi: 'Đó là một bộ phim hay đến nỗi tôi đã xem hai lần.', ref: 'It was such a good film that I watched it twice.', focus: 'such a … that' },
+        { t: 'tr', vi: 'Trời quá nóng để chạy bộ ngoài trời.', ref: "It's too hot to go jogging outside.", focus: 'too + adj + to V' },
+        { t: 'tr', vi: 'Em trai tôi chưa đủ tuổi để lái xe máy.', ref: "My younger brother isn't old enough to ride a motorbike.", focus: 'adj + enough' },
+        { t: 'tr', vi: 'Chúng tôi không có đủ thời gian để hoàn thành dự án.', ref: "We don't have enough time to finish the project.", focus: 'enough + noun' },
+        { t: 'tr', vi: 'Nhiều thành phố đông đúc đến mức hệ thống giao thông không thể đáp ứng.', ref: 'Many cities are so crowded that the transport system cannot cope.', focus: 'so … that (IELTS)' },
+      ],
+    },
+  ],
+};
