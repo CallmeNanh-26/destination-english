@@ -38,6 +38,7 @@ export default defineConfig({
     proxy: {
       '/gemini-api': forward('/gemini-api', 'https://generativelanguage.googleapis.com'),
       '/dict-api': forward('/dict-api', 'https://api.dictionaryapi.dev'),
+      '/github-api': forward('/github-api', 'https://api.github.com'),
     },
   },
 });

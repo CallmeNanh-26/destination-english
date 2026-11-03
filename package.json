@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "audio": "node scripts/gen-audio.mjs"
+    "audio": "node scripts/gen-audio.mjs",
+    "test": "node scripts/test-sync-plan.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

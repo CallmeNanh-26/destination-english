@@ -3,8 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { allUnits, findUnit } from '../data/index.js';
 import { useStore } from '../lib/store';
-import { addCard, dueCards, forecast, grade, GRADES, previewIntervals } from '../lib/srs';
+import { addCard, dueCards, grade, GRADES, previewIntervals } from '../lib/srs';
 import { downloadIcs, googleCalendarLink } from '../lib/calendar';
+import { describeHabit, planSessions, sessionLabel } from '../lib/plan';
+import { calendarUrl, isConnected } from '../lib/sync';
+import { Link } from 'react-router-dom';
 import { hasKey, makeTranslationTasks } from '../lib/ai';
 import { GROUPS, SpeakBtn, WordDetail, vocabCardId } from '../components/Vocab.jsx';
 import ExerciseSection from '../components/Exercise.jsx';
@@ -136,7 +139,8 @@ function CardViewer({ items, onGraded }) {
 
 // ---------- 1. due by schedule ----------
 function DueReview() {
-  const { cards, notebook, errors, settings } = useStore((s) => s);
+  const state = useStore((s) => s);
+  const { cards, notebook, errors } = state;
   const [reviewed, setReviewed] = useState(0);
 
   const queue = useMemo(
@@ -147,7 +151,7 @@ function DueReview() {
         .filter((x) => x.item),
     [cards, notebook, errors],
   );
-  const next = forecast(cards, 30).find((d, i) => i > 0 && d.n > 0);
+  const next = planSessions(cards, state.settings, state.activity, 30).sessions.find((s) => !s.now);
 
   return (
     <>
@@ -165,35 +169,84 @@ function DueReview() {
             {Object.keys(cards).length === 0
               ? 'Hãy học flashcard trong một Unit, lưu từ vào sổ tay hoặc làm bài nói/dịch để có thẻ ôn tập.'
               : next
-                ? `Lần ôn tiếp theo: ${next.date.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric' })} (${next.n} thẻ). Muốn ôn thêm? Dùng tab “Tự chọn từ để ôn”.`
+                ? `Lần ôn tiếp theo: ${sessionLabel(next)} (${next.n} thẻ). Muốn ôn thêm? Dùng tab “Tự chọn từ để ôn”.`
                 : 'Lịch ôn 30 ngày tới đang trống.'}
           </p>
         </div>
       )}
 
-      <div className="card">
-        <h3>📅 Nhắc lịch ôn trên Calendar</h3>
-        <p className="muted small">
-          Giờ ôn mỗi ngày: <strong>{settings.reviewTime}</strong> (đổi trong Cài đặt). File .ics chứa các buổi ôn 30 ngày tới kèm số thẻ, nhập
-          được vào Google Calendar, Apple Calendar và Outlook. Lịch ôn thay đổi theo kết quả học, nên thỉnh thoảng hãy tải lại.
-        </p>
-        <div className="row">
-          <button className="btn primary" disabled={!Object.keys(cards).length} onClick={() => downloadIcs(cards, settings.reviewTime)}>
-            ⬇ Tải lịch ôn (.ics)
-          </button>
-          {(queue.length > 0 || next) && (
-            <a
-              className="btn"
-              target="_blank"
-              rel="noreferrer"
-              href={queue.length ? googleCalendarLink(new Date(), settings.reviewTime, queue.length) : googleCalendarLink(next.date, settings.reviewTime, next.n)}
-            >
-              + Thêm buổi ôn gần nhất vào Google Calendar
-            </a>
+      <ReviewPlan state={state} />
+    </>
+  );
+}
+
+// ---------- suggested schedule ----------
+const pct = (x) => `${Math.round(x * 100)}%`;
+
+export function ReviewPlan({ state, compact = false }) {
+  const { habit, sessions } = useMemo(
+    () => planSessions(state.cards, state.settings, state.activity, 30),
+    [state.cards, state.settings, state.activity],
+  );
+  const [showAll, setShowAll] = useState(false);
+  const list = showAll ? sessions : sessions.slice(0, compact ? 3 : 5);
+  const synced = isConnected() && calendarUrl();
+
+  return (
+    <div className="card stack">
+      <h3>📅 Lịch ôn đề xuất</h3>
+      <p className="muted small" style={{ margin: 0 }}>
+        Ngày ôn của từng thẻ được tính theo đường cong lãng quên (thẻ hay quên quay lại sớm, thẻ nhớ chắc giãn dần). {describeHabit(habit, state.settings)}
+      </p>
+      {sessions.length ? (
+        <div>
+          {list.map((s) => (
+            <div key={s.start.getTime()} className="unit-row" style={{ alignItems: 'flex-start' }}>
+              <div style={{ minWidth: 150 }}>
+                <strong>{sessionLabel(s)}</strong>
+                <div className="muted small">{s.n} thẻ · ~{s.minutes} phút</div>
+              </div>
+              <div className="small" style={{ flex: 1 }}>
+                {s.recall !== null && (
+                  <>
+                    Độ nhớ dự kiến: <strong>{pct(s.recall)}</strong>
+                    {s.recallIfSkipped < s.recall - 0.01 && (
+                      <span className="muted"> · bỏ qua 3 ngày sẽ tụt còn {pct(s.recallIfSkipped)}</span>
+                    )}
+                  </>
+                )}
+                {s.newCards > 0 && <div className="muted">{s.newCards} thẻ mới, học lần đầu</div>}
+              </div>
+              {!compact && (
+                <a className="btn small" target="_blank" rel="noreferrer" href={googleCalendarLink(s)} title="Thêm buổi này vào Google Calendar">
+                  + Lịch
+                </a>
+              )}
+            </div>
+          ))}
+          {sessions.length > list.length && (
+            <button className="btn small" style={{ marginTop: 8 }} onClick={() => setShowAll(true)}>
+              Xem cả {sessions.length} buổi trong 30 ngày tới
+            </button>
           )}
         </div>
-      </div>
-    </>
+      ) : (
+        <p className="muted small">Chưa có thẻ nào trong lịch ôn.</p>
+      )}
+      {!compact && (
+        <>
+          <div className="row">
+            <button className="btn" disabled={!sessions.length} onClick={() => downloadIcs(state)}>⬇ Tải lịch 30 ngày (.ics)</button>
+            <Link className="btn" to="/settings">⚙️ Đổi giờ nhắc</Link>
+          </div>
+          <p className="muted small" style={{ margin: 0 }}>
+            {synced
+              ? '✓ Đã bật đồng bộ: có thể đăng ký lịch tự cập nhật trong Cài đặt → Đồng bộ, không cần tải file mỗi lần.'
+              : 'Mẹo: bật “Đồng bộ máy tính ↔ điện thoại” trong Cài đặt để có lịch nhắc tự cập nhật, không phải tải file .ics nhiều lần.'}
+          </p>
+        </>
+      )}
+    </div>
   );
 }
 

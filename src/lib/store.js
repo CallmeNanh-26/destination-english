@@ -1,17 +1,24 @@
-// Tiny persistent store on localStorage. Every slice is a plain object keyed by id,
-// so it can later be synced to Supabase without changing callers.
+// Tiny persistent store on localStorage. Every slice is a plain object keyed by id.
+// `stamps` remembers when each record last changed (also for deletions), so two devices can be merged record by record.
 import { useSyncExternalStore } from 'react';
 
 const KEY = 'destination-english-v1';
 const empty = {
-  settings: { geminiKey: '', model: 'gemini-flash-latest', reviewTime: '20:00', voice: '' },
+  settings: { geminiKey: '', model: 'gemini-flash-latest', reviewTime: '20:00', reviewMode: 'auto', voice: '' },
   notebook: {}, // id -> { id, text, ipa, vi, en, ex, col, unit, createdAt }
   errors: {}, // id -> { id, wrong, right, type, explain, source, createdAt }
   cards: {}, // id -> { id, kind: 'vocab'|'note'|'error', ref, unit, card (fsrs) }
   progress: {}, // `${unitId}:${section}` -> { score, total, at }
   notes: {}, // unitId -> free text scratch notes
   speaking: {}, // `${unitId}:${qIndex}` -> [attempt, ...] newest first
+  activity: {}, // 'YYYY-MM-DD' -> { [hour]: minutes of study in that hour }
+  stamps: {}, // `${slice}:${id}` -> ms of last change (record missing + stamp = deleted)
 };
+
+// Settings that follow the learner across devices (the API key and voice stay per device).
+export const SYNCED_SETTINGS = ['reviewTime', 'reviewMode', 'model'];
+// Changes to these slices count as study time.
+const STUDY_SLICES = new Set(['cards', 'progress', 'speaking', 'errors', 'notebook', 'notes']);
 
 function load() {
   try {
@@ -39,29 +46,58 @@ export function getState() {
   return state;
 }
 
-export function setState(updater) {
+// `meta.remote` marks changes that came from sync, so sync does not push them straight back.
+export function setState(updater, meta = {}) {
   state = typeof updater === 'function' ? updater(state) : updater;
   persist();
-  listeners.forEach((l) => l());
+  listeners.forEach((l) => l(meta));
+}
+
+export function subscribe(listener) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
 }
 
 export function update(slice, id, value) {
+  const now = Date.now();
   setState((s) => {
     const next = { ...s[slice] };
     if (value === undefined) delete next[id];
     else next[id] = value;
-    return { ...s, [slice]: next };
+    const out = { ...s, [slice]: next, stamps: { ...s.stamps, [`${slice}:${id}`]: now } };
+    return STUDY_SLICES.has(slice) ? withActivity(out, now) : out;
   });
 }
 
+export function setSetting(k, v) {
+  setState((s) => ({
+    ...s,
+    settings: { ...s.settings, [k]: v },
+    stamps: SYNCED_SETTINGS.includes(k) ? { ...s.stamps, [`settings:${k}`]: Date.now() } : s.stamps,
+  }));
+}
+
+export const dayKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+// Count each minute with any study action once; this is what the reminder planner learns habits from.
+let lastMinute = 0;
+function withActivity(s, now) {
+  const minute = Math.floor(now / 60000);
+  if (minute === lastMinute) return s;
+  lastMinute = minute;
+  const d = new Date(now);
+  const day = dayKey(d);
+  const hours = { ...s.activity[day] };
+  hours[d.getHours()] = (hours[d.getHours()] || 0) + 1;
+  const activity = { ...s.activity, [day]: hours };
+  // Keep about three months of history.
+  const cutoff = dayKey(new Date(now - 90 * 86400000));
+  for (const k of Object.keys(activity)) if (k < cutoff) delete activity[k];
+  return { ...s, activity };
+}
+
 export function useStore(selector = (s) => s) {
-  return useSyncExternalStore(
-    (l) => {
-      listeners.add(l);
-      return () => listeners.delete(l);
-    },
-    () => selector(state),
-  );
+  return useSyncExternalStore(subscribe, () => selector(state));
 }
 
 export function exportData() {

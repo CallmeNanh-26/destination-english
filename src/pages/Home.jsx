@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { books } from '../data/index.js';
 import { useStore } from '../lib/store';
 import { dueCards, forecast } from '../lib/srs';
+import { planSessions, sessionLabel } from '../lib/plan';
 
 function unitProgress(progress, unitId) {
   const done = Object.entries(progress).filter(([k]) => k.startsWith(unitId + ':'));
@@ -13,8 +14,9 @@ function unitProgress(progress, unitId) {
 }
 
 export default function Home() {
-  const { cards, progress, notebook, errors, settings } = useStore((s) => s);
+  const { cards, progress, notebook, errors, settings, activity } = useStore((s) => s);
   const due = dueCards(cards).length;
+  const next = useMemo(() => planSessions(cards, settings, activity, 30).sessions.find((s) => !s.now), [cards, settings, activity]);
   const fc = forecast(cards, 14);
   const max = Math.max(1, ...fc.map((d) => d.n));
   const [bookId, setBookId] = useState('b1');
@@ -34,6 +36,11 @@ export default function Home() {
           <div className="muted small">Cần ôn hôm nay</div>
           <div className="stat" style={{ color: due ? 'var(--accent)' : 'var(--ok)' }}>{due}</div>
           <div className="small">{due ? 'Bắt đầu ôn tập →' : 'Bạn đã ôn xong 🎉'}</div>
+          {next && (
+            <div className="muted small" style={{ marginTop: 4 }}>
+              ⏰ Buổi ôn tiếp: {sessionLabel(next)} · {next.n} thẻ
+            </div>
+          )}
         </Link>
         <div className="card">
           <div className="muted small">Lịch ôn 14 ngày tới</div>
