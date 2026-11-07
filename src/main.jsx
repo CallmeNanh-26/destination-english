@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App.jsx';
 import './styles.css';
-import { startSync } from './lib/sync';
+import { startCloud } from './lib/cloud';
 
-startSync();
+startCloud();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

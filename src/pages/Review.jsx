@@ -6,7 +6,6 @@ import { useStore } from '../lib/store';
 import { addCard, dueCards, grade, GRADES, previewIntervals } from '../lib/srs';
 import { downloadIcs, googleCalendarLink } from '../lib/calendar';
 import { describeHabit, planSessions, sessionLabel } from '../lib/plan';
-import { calendarUrl, isConnected } from '../lib/sync';
 import { Link } from 'react-router-dom';
 import { hasKey, makeTranslationTasks } from '../lib/ai';
 import { GROUPS, SpeakBtn, WordDetail, vocabCardId } from '../components/Vocab.jsx';
@@ -190,7 +189,6 @@ export function ReviewPlan({ state, compact = false }) {
   );
   const [showAll, setShowAll] = useState(false);
   const list = showAll ? sessions : sessions.slice(0, compact ? 3 : 5);
-  const synced = isConnected() && calendarUrl();
 
   return (
     <div className="card stack">
@@ -240,9 +238,8 @@ export function ReviewPlan({ state, compact = false }) {
             <Link className="btn" to="/settings">⚙️ Đổi giờ nhắc</Link>
           </div>
           <p className="muted small" style={{ margin: 0 }}>
-            {synced
-              ? '✓ Đã bật đồng bộ: có thể đăng ký lịch tự cập nhật trong Cài đặt → Đồng bộ, không cần tải file mỗi lần.'
-              : 'Mẹo: bật “Đồng bộ máy tính ↔ điện thoại” trong Cài đặt để có lịch nhắc tự cập nhật, không phải tải file .ics nhiều lần.'}
+            Bấm “+ Lịch” để thêm từng buổi vào Google Calendar (có chuông nhắc), hoặc tải file .ics để nhập cả 30 ngày. Lịch thay đổi theo kết
+            quả học, nên thỉnh thoảng hãy cập nhật lại.
           </p>
         </>
       )}

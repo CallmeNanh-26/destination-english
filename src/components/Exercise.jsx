@@ -1,8 +1,15 @@
 // Renders one exercise section and grades it.
 // Item types: mcq | tf | gap | fix | match | tr (AI-graded translation) | dict (dictation).
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { isCorrect, normalize, shuffle, Rich } from '../lib/text.jsx';
-import { saveProgress } from '../lib/store';
+import { getState, saveProgress, update, useStore } from '../lib/store';
+
+// Store in-progress answers without touching the last result.
+function saveDraft(key, values) {
+  const prev = getState().progress[key];
+  if (!prev && !Object.keys(values).length) return;
+  update('progress', key, { ...(prev || { score: 0, total: 0 }), values, checked: false, at: Date.now() });
+}
 import { addError } from '../lib/collect';
 import { gradeTranslation, hasKey } from '../lib/ai';
 
@@ -40,27 +47,44 @@ function rightAnswer(item) {
 }
 
 export default function ExerciseSection({ section, unitId, sectionKey, source }) {
-  const [values, setValues] = useState({});
-  const [checked, setChecked] = useState(false);
+  const saveKey = unitId && sectionKey ? `${unitId}:${sectionKey}` : null;
+  // Answers and the last result are kept in `progress`, so the section looks the same after a reload or on another device.
+  const saved = useStore((s) => (saveKey ? s.progress[saveKey] : null));
+  const [values, setValues] = useState(() => saved?.values || {});
+  const [checked, setChecked] = useState(() => Boolean(saved?.checked));
   const set = (i, v) => setValues((s) => ({ ...s, [i]: v }));
 
   const gradable = section.items.filter(autoGradable);
   const score = section.items.reduce((n, it, i) => n + (autoGradable(it) && check(it, values[i]) ? 1 : 0), 0);
 
+  // Keep an unfinished attempt too (debounced), so half-done work is not lost.
+  useEffect(() => {
+    if (!saveKey || checked || !Object.keys(values).length) return;
+    const t = setTimeout(() => saveDraft(saveKey, values), 1500);
+    return () => clearTimeout(t);
+  }, [values, checked, saveKey]);
+
   function submit() {
     setChecked(true);
-    if (unitId && sectionKey) saveProgress(unitId, sectionKey, score, gradable.length);
+    if (saveKey) saveProgress(unitId, sectionKey, score, gradable.length, { values, checked: true, best: Math.max(score, saved?.best || 0) });
   }
 
   function reset() {
     setValues({});
     setChecked(false);
+    if (saveKey && saved) saveDraft(saveKey, {});
   }
 
   return (
     <div className="card">
       {section.title && <h3>{section.title}</h3>}
       {section.instruction && <p className="muted small">{section.instruction}</p>}
+      {saved?.total > 0 && !checked && (
+        <p className="small" style={{ marginTop: -4 }}>
+          <span className="badge v">Lần trước: {saved.score}/{saved.total}</span>
+          {saved.best > saved.score && <span className="muted"> · cao nhất {saved.best}/{saved.total}</span>}
+        </p>
+      )}
       {section.items.map((item, i) => (
         <Item
           key={i}
@@ -70,6 +94,7 @@ export default function ExerciseSection({ section, unitId, sectionKey, source })
           onChange={(v) => set(i, v)}
           checked={checked}
           source={source || section.title}
+          saveKey={saveKey && `${saveKey}:tr${i}`}
         />
       ))}
       {gradable.length > 0 && (
@@ -97,7 +122,7 @@ export default function ExerciseSection({ section, unitId, sectionKey, source })
   );
 }
 
-function Item({ n, item, value, onChange, checked, source }) {
+function Item({ n, item, value, onChange, checked, source, saveKey }) {
   const ok = checked ? check(item, value) : null;
   return (
     <div className="ex-item">
@@ -107,7 +132,7 @@ function Item({ n, item, value, onChange, checked, source }) {
       {item.t === 'fix' && <Fix n={n} item={item} value={value} onChange={onChange} ok={ok} checked={checked} />}
       {item.t === 'dict' && <Dictation n={n} item={item} value={value} onChange={onChange} ok={ok} checked={checked} />}
       {item.t === 'match' && <Match item={item} value={value} onChange={onChange} checked={checked} />}
-      {item.t === 'tr' && <Translate n={n} item={item} source={source} />}
+      {item.t === 'tr' && <Translate n={n} item={item} source={source} saveKey={saveKey} />}
       {checked && item.t !== 'tr' && (
         <div className={'feedback ' + (ok ? 'right' : 'wrong')}>
           {ok ? '✓ Chính xác' : <>✗ Đáp án: <strong>{rightAnswer(item)}</strong></>}
@@ -302,12 +327,20 @@ function Match({ item, value = {}, onChange, checked }) {
   );
 }
 
-export function Translate({ n, item, source }) {
-  const [answer, setAnswer] = useState('');
-  const [res, setRes] = useState(null);
+export function Translate({ n, item, source, saveKey }) {
+  // With a saveKey the learner's sentence and the AI feedback are stored (in `progress`) and shown again later.
+  const saved = useStore((s) => (saveKey ? s.progress[saveKey] : null));
+  const [answer, setAnswer] = useState(() => saved?.answer || '');
+  const [res, setRes] = useState(() => saved?.res || null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [showRef, setShowRef] = useState(false);
+
+  useEffect(() => {
+    if (!saveKey || answer === (getState().progress[saveKey]?.answer || '')) return;
+    const t = setTimeout(() => update('progress', saveKey, { ...getState().progress[saveKey], answer, at: Date.now() }), 1500);
+    return () => clearTimeout(t);
+  }, [answer, saveKey]);
 
   async function grade() {
     setBusy(true);
@@ -315,6 +348,7 @@ export function Translate({ n, item, source }) {
     try {
       const r = await gradeTranslation({ ...item, answer });
       setRes(r);
+      if (saveKey) update('progress', saveKey, { answer, res: r, score: r.score, total: 10, done: true, at: Date.now() });
       (r.errors || []).forEach((e) =>
         addError({ wrong: e.wrong, right: e.right, type: e.type, explain: e.explain, source: `Dịch: ${item.vi}` }),
       );

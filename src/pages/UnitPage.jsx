@@ -7,6 +7,12 @@ import ExerciseSection from '../components/Exercise.jsx';
 import Speaking from '../components/Speaking.jsx';
 import NotesPanel from '../components/NotesPanel.jsx';
 import { Rich } from '../lib/text.jsx';
+import { saveProgress, useStore } from '../lib/store';
+import { unitProgress } from '../lib/progress';
+import { UnitProgress } from '../components/Progress.jsx';
+
+// Which progress part each tab feeds, to show a ✓ on finished tabs.
+const TAB_PART = { flash: 'flash', reading: 'reading', listening: 'listening', exercises: 'exercises', speaking: 'speaking', theory: 'theory' };
 
 const VOCAB_TABS = [
   ['words', '📚 Từ vựng'],
@@ -31,6 +37,9 @@ function Unit({ id }) {
   const unit = meta?.content;
   const tabs = meta?.kind === 'grammar' ? GRAMMAR_TABS : VOCAB_TABS;
   const [tab, setTab] = useState(tabs[0][0]);
+  const state = useStore((s) => s);
+  const p = unit ? unitProgress(meta, state) : null;
+  const full = (k) => p?.parts.find((x) => x.key === TAB_PART[k] && x.n >= x.of);
 
   if (!unit) {
     return (
@@ -53,10 +62,12 @@ function Unit({ id }) {
         </div>
         <h1>{unit.title}</h1>
         <p className="muted">{unit.titleVi}</p>
+        <UnitProgress p={p} />
         <div className="tabs">
           {tabs.map(([k, label]) => (
             <button key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => setTab(k)}>
               {label}
+              {full(k) && <span style={{ color: 'var(--ok)', marginLeft: 4 }}>✓</span>}
             </button>
           ))}
         </div>
@@ -65,7 +76,19 @@ function Unit({ id }) {
         {tab === 'reading' && <Reading unit={unit} />}
         {tab === 'listening' && <Listening unit={unit} />}
         {tab === 'speaking' && <Speaking unit={unit} />}
-        {tab === 'theory' && <Theory blocks={unit.blocks} />}
+        {tab === 'theory' && (
+          <>
+            <Theory blocks={unit.blocks} />
+            <div className="row" style={{ marginTop: 14 }}>
+              {state.progress[`${unit.id}:theory`]?.done ? (
+                <span className="badge v">✓ Đã học xong lý thuyết</span>
+              ) : (
+                <button className="btn primary" onClick={() => saveProgress(unit.id, 'theory', 1, 0)}>✓ Đánh dấu đã học xong lý thuyết</button>
+              )}
+              <button className="btn" onClick={() => setTab('exercises')}>Làm bài tập →</button>
+            </div>
+          </>
+        )}
         {tab === 'exercises' && (
           <div className="stack">
             {unit.exercises.map((s, i) => (

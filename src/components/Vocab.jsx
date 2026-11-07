@@ -1,8 +1,8 @@
 // Word list with expandable details, and the flashcard trainer.
 import { useEffect, useMemo, useState } from 'react';
 import { speak } from '../lib/speech';
-import { addCard, grade, GRADES, previewIntervals } from '../lib/srs';
-import { useStore } from '../lib/store';
+import { addCard, grade, GRADES, humanize, previewIntervals } from '../lib/srs';
+import { getState, update, useStore } from '../lib/store';
 import { shuffle } from '../lib/text.jsx';
 
 export const GROUPS = {
@@ -143,14 +143,27 @@ export function Flashcards({ unit }) {
   const [show, setShow] = useState({ vi: true, en: true, fam: true, syn: true, ant: true, col: true, ex: true });
   const [front, setFront] = useState('en'); // 'en' = word on the front, 'vi' = Vietnamese meaning on the front
   const [order, setOrder] = useState(0); // bump to reshuffle
-  const [i, setI] = useState(0);
+  const posKey = `${unit.id}:flash`;
+  // Resume at the card where the learner stopped last time.
+  const [i, setI] = useState(() => getState().progress[posKey]?.pos || 0);
   const [flipped, setFlipped] = useState(false);
+  const cards = useStore((s) => s.cards);
 
   const deck = useMemo(() => {
     const list = unit.vocab.filter((v) => groups.has(v.g));
     return order ? shuffle(list) : list;
   }, [unit, groups, order]);
   const v = deck[Math.min(i, deck.length - 1)];
+  const learned = deck.filter((x) => cards[vocabCardId(unit.id, x.w)]?.card.reps > 0).length;
+  const status = v && cards[vocabCardId(unit.id, v.w)]?.card;
+
+  useEffect(() => {
+    if (order) return; // a shuffled order has no stable position
+    const t = setTimeout(() => {
+      if (getState().progress[posKey]?.pos !== i) update('progress', posKey, { pos: i, at: Date.now() });
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [i, order, posKey]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -168,7 +181,7 @@ export function Flashcards({ unit }) {
 
   function next(step) {
     setFlipped(false);
-    setI((x) => (x + step + deck.length) % deck.length);
+    setI((x) => (Math.min(x, deck.length - 1) + step + deck.length) % deck.length);
   }
 
   function rate(rating) {
@@ -219,8 +232,21 @@ export function Flashcards({ unit }) {
         <>
           <div className="row" style={{ justifyContent: 'center' }}>
             <button className="btn ghost" onClick={() => next(-1)}>←</button>
-            <span className="muted">{i + 1} / {deck.length}</span>
+            <span className="muted">{Math.min(i, deck.length - 1) + 1} / {deck.length}</span>
             <button className="btn ghost" onClick={() => next(1)}>→</button>
+          </div>
+          <div className="stack" style={{ gap: 4, maxWidth: 560, margin: '0 auto', width: '100%' }}>
+            <div className="row small" style={{ justifyContent: 'space-between' }}>
+              <span className="muted">Đã học {learned}/{deck.length} thẻ</span>
+              <span className={'badge ' + (status?.reps ? 'v' : '')}>
+                {!status?.reps
+                  ? 'Thẻ mới'
+                  : new Date(status.due) <= new Date()
+                    ? 'Đến hạn ôn'
+                    : `Đã học · ôn lại sau ${humanize(new Date(status.due) - new Date())}`}
+              </span>
+            </div>
+            <div className="progress"><div style={{ width: `${(learned / Math.max(1, deck.length)) * 100}%` }} /></div>
           </div>
           <div className="flash-wrap">
             <div className={'flash' + (flipped ? ' flipped' : '')} onClick={() => setFlipped((f) => !f)}>

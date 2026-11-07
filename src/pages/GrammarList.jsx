@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { books } from '../data/index.js';
+import { useStore } from '../lib/store';
+import { unitProgress } from '../lib/progress';
+import { MiniUnitBar } from '../components/Progress.jsx';
 
 export default function GrammarList() {
+  const state = useStore((s) => s);
   return (
     <div className="stack">
       <h1>Ngữ pháp</h1>
@@ -18,6 +22,7 @@ export default function GrammarList() {
                 <span className="unit-no">{u.no}</span>
                 <span style={{ flex: 1 }}>{u.title}</span>
                 {!u.content && <span className="badge">sắp có</span>}
+                {u.content && <MiniUnitBar p={unitProgress(u, state)} />}
               </Link>
             ))}
           </div>

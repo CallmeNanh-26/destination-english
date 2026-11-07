@@ -15,8 +15,10 @@ const empty = {
   stamps: {}, // `${slice}:${id}` -> ms of last change (record missing + stamp = deleted)
 };
 
-// Settings that follow the learner across devices (the API key and voice stay per device).
-export const SYNCED_SETTINGS = ['reviewTime', 'reviewMode', 'model'];
+// Settings saved with the learner's account (the voice depends on the device, so it stays local).
+export const SYNCED_SETTINGS = ['reviewTime', 'reviewMode', 'model', 'geminiKey'];
+// Everything that belongs to one learner; cleared when someone else signs in on this device.
+export const RECORD_SLICES = ['notebook', 'errors', 'cards', 'progress', 'notes', 'speaking'];
 // Changes to these slices count as study time.
 const STUDY_SLICES = new Set(['cards', 'progress', 'speaking', 'errors', 'notebook', 'notes']);
 
@@ -96,6 +98,20 @@ function withActivity(s, now) {
   return { ...s, activity };
 }
 
+// Remove the current learner's data from this device (their account keeps a copy).
+export function clearLearnerData() {
+  setState(
+    (s) => ({
+      ...s,
+      ...Object.fromEntries(RECORD_SLICES.map((k) => [k, {}])),
+      activity: {},
+      stamps: {},
+      settings: { ...s.settings, geminiKey: '' },
+    }),
+    { remote: true },
+  );
+}
+
 export function useStore(selector = (s) => s) {
   return useSyncExternalStore(subscribe, () => selector(state));
 }
@@ -109,8 +125,8 @@ export function importData(json) {
   setState((s) => ({ ...s, ...data, settings: { ...s.settings, ...data.settings, geminiKey: s.settings.geminiKey } }));
 }
 
-export function saveProgress(unitId, section, score, total) {
-  update('progress', `${unitId}:${section}`, { score, total, at: Date.now() });
+export function saveProgress(unitId, section, score, total, extra = {}) {
+  update('progress', `${unitId}:${section}`, { score, total, at: Date.now(), done: true, ...extra });
 }
 
 export const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

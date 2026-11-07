@@ -1,45 +1,41 @@
-// Quick checks for the device merge and the review planner: `node scripts/test-sync-plan.mjs`
+﻿// Quick checks for learning progress and the review planner: `npm test`
 import assert from 'node:assert/strict';
 
 const mem = {};
 globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
 
-const { mergeData, syncPayload } = await import('../src/lib/merge.js');
 const { planSessions, studyHabit, slotFor } = await import('../src/lib/plan.js');
 const { dayKey } = await import('../src/lib/store.js');
+const { unitProgress, bookProgress, streak } = await import('../src/lib/progress.js');
+const { books, findUnit } = await import('../src/data/index.js');
 const { createEmptyCard, fsrs, Rating } = await import('ts-fsrs');
 
-const S = ['reviewTime', 'reviewMode', 'model'];
-
-// ---- merge ----
-const pc = {
-  settings: { reviewTime: '20:00', reviewMode: 'auto', geminiKey: 'SECRET' },
-  notebook: { a: { id: 'a', text: 'old' }, gone: { id: 'gone' } },
-  errors: {}, cards: { legacy: { id: 'legacy', card: { last_review: '2026-10-01' } } }, progress: {}, notes: {}, speaking: {},
-  activity: { '2026-11-01': { 20: 10 } },
-  stamps: { 'notebook:a': 100, 'notebook:gone': 50 },
+// ---- progress ----
+const vu = findUnit('b1-u03');
+const gu = findUnit('b1-u01');
+const st0 = { cards: {}, progress: {}, speaking: {}, activity: {} };
+assert.equal(unitProgress(vu, st0).pct, 0, 'untouched unit is 0%');
+const st1 = {
+  ...st0,
+  cards: Object.fromEntries(vu.content.vocab.map((v) => [`v:b1-u03:${v.w}`, { card: { reps: 1 } }])),
+  progress: {
+    ...Object.fromEntries(vu.content.reading.map((_, i) => [`b1-u03:reading-${i + 1}`, { done: true, score: 3, total: 6 }])),
+    'b1-u03:listening-1': { done: true, score: 5, total: 5 },
+    'b1-u03:ex-0': { done: false, values: { 0: 'x' } },
+  },
 };
-const phone = {
-  settings: { reviewTime: '07:00', reviewMode: 'fixed' },
-  notebook: { a: { id: 'a', text: 'new' }, b: { id: 'b', text: 'phone only' } },
-  errors: {}, cards: { legacy: { id: 'legacy', card: { last_review: '2026-10-05' } } }, progress: {}, notes: {}, speaking: {},
-  activity: { '2026-11-01': { 20: 4, 7: 15 } },
-  stamps: { 'notebook:a': 200, 'notebook:b': 150, 'notebook:gone': 300, 'settings:reviewMode': 400 },
-};
-const m = mergeData(pc, phone, S);
-assert.equal(m.notebook.a.text, 'new', 'newer edit wins');
-assert.ok(m.notebook.b, 'record only on the other device is added');
-assert.ok(!m.notebook.gone, 'deletion on the other device is applied');
-assert.equal(m.cards.legacy.card.last_review, '2026-10-05', 'legacy card: more recently reviewed wins');
-assert.deepEqual(m.activity['2026-11-01'], { 20: 10, 7: 15 }, 'activity keeps max per hour');
-assert.equal(m.settings.reviewMode, 'fixed', 'newer synced setting wins');
-assert.equal(m.settings.reviewTime, '20:00', 'unstamped setting stays local');
-assert.equal(m.settings.geminiKey, 'SECRET', 'key stays on device');
-assert.equal(syncPayload(m, S).settings.geminiKey, undefined, 'key never leaves the device');
-// Merging is symmetric for records.
-const m2 = mergeData(phone, pc, S);
-assert.deepEqual(Object.keys(m2.notebook).sort(), Object.keys(m.notebook).sort());
-
+const p1 = unitProgress(vu, st1);
+assert.equal(p1.parts.find((x) => x.key === 'flash').n, vu.content.vocab.length, 'all flashcards learned');
+assert.equal(p1.parts.find((x) => x.key === 'exercises').n, 0, 'an unfinished draft does not count as done');
+assert.equal(p1.pct, Math.round(((1 + 1 + 1 / 5) / 5) * 100), 'unit % is the average of its parts');
+const g = unitProgress(gu, { ...st0, progress: { 'b1-u01:theory': { done: true, score: 1, total: 0 } } });
+assert.equal(g.pct, 50, 'grammar: theory is half of the unit');
+const bp = bookProgress(books[0], st1);
+assert.equal(bp.units.length, 42);
+assert.equal(bp.next.meta.id, 'b1-u03', 'continue with the unit already started');
+const today = new Date('2026-11-07T09:00:00');
+const act = { [dayKey(new Date('2026-11-06'))]: { 20: 5 }, [dayKey(new Date('2026-11-05'))]: { 20: 5 }, [dayKey(new Date('2026-11-03'))]: { 9: 1 } };
+assert.equal(streak(act, today), 2, 'streak counts back from yesterday when nothing yet today');
 // ---- habit ----
 const now = new Date('2026-11-04T10:00:00'); // Wednesday
 const activity = {};

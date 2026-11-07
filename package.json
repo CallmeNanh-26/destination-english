@@ -8,9 +8,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "audio": "node scripts/gen-audio.mjs",
-    "test": "node scripts/test-sync-plan.mjs"
+    "test": "node scripts/test.mjs"
   },
   "dependencies": {
+    "firebase": "^11.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",

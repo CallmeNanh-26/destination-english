@@ -4,17 +4,14 @@ import { books } from '../data/index.js';
 import { useStore } from '../lib/store';
 import { dueCards, forecast } from '../lib/srs';
 import { planSessions, sessionLabel } from '../lib/plan';
-
-function unitProgress(progress, unitId) {
-  const done = Object.entries(progress).filter(([k]) => k.startsWith(unitId + ':'));
-  if (!done.length) return null;
-  const score = done.reduce((s, [, v]) => s + v.score, 0);
-  const total = done.reduce((s, [, v]) => s + v.total, 0);
-  return { parts: done.length, pct: total ? Math.round((score / total) * 100) : 0 };
-}
+import { unitProgress } from '../lib/progress';
+import { BookProgress, MiniUnitBar } from '../components/Progress.jsx';
+import { cloudEnabled, useAccount } from '../lib/cloud';
 
 export default function Home() {
-  const { cards, progress, notebook, errors, settings, activity } = useStore((s) => s);
+  const state = useStore((s) => s);
+  const { cards, notebook, errors, settings, activity } = state;
+  const acc = useAccount();
   const due = dueCards(cards).length;
   const next = useMemo(() => planSessions(cards, settings, activity, 30).sessions.find((s) => !s.now), [cards, settings, activity]);
   const fc = forecast(cards, 14);
@@ -24,13 +21,20 @@ export default function Home() {
 
   return (
     <div className="stack">
-      <h1>Chào bạn 👋</h1>
+      <h1>Chào {acc.user ? acc.user.name : 'bạn'} 👋</h1>
+      {cloudEnabled && acc.ready && !acc.user && (
+        <div className="alert">
+          <Link to="/account"><strong>Đăng nhập</strong></Link> để lưu tiến độ vào tài khoản và học tiếp trên mọi thiết bị. Chưa đăng nhập thì
+          tiến độ chỉ nằm trong trình duyệt này.
+        </div>
+      )}
       {!settings.geminiKey && (
         <div className="alert">
           Để AI chấm bài nói, bài dịch và tự tra nghĩa từ, hãy thêm <strong>Gemini API key</strong> miễn phí trong{' '}
           <Link to="/settings">Cài đặt</Link>.
         </div>
       )}
+      {!book.soon && <BookProgress book={book} state={state} />}
       <div className="grid">
         <Link to="/review" className="card" style={{ color: 'inherit' }}>
           <div className="muted small">Cần ôn hôm nay</div>
@@ -70,14 +74,14 @@ export default function Home() {
       ) : (
         <div className="card" style={{ padding: 8 }}>
           {book.units.map((u) => {
-            const p = unitProgress(progress, u.id);
+            const p = u.content && unitProgress(u, state);
             return (
               <Link key={u.id} to={`/unit/${u.id}`} className={'unit-row' + (u.content ? '' : ' disabled')}>
                 <span className="unit-no">{u.no}</span>
                 <span className={'badge ' + (u.kind === 'grammar' ? 'g' : 'v')}>{u.kind === 'grammar' ? 'Ngữ pháp' : 'Từ vựng'}</span>
                 <span style={{ flex: 1 }}>{u.title}</span>
                 {!u.content && <span className="badge">sắp có</span>}
-                {p && <span className="small muted">{p.parts} phần · {p.pct}%</span>}
+                {p && <MiniUnitBar p={p} />}
               </Link>
             );
           })}

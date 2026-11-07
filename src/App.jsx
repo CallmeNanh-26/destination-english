@@ -8,6 +8,7 @@ import Notebook from './pages/Notebook.jsx';
 import Review from './pages/Review.jsx';
 import Errors from './pages/Errors.jsx';
 import Settings from './pages/Settings.jsx';
+import AccountPage, { AccountChip } from './components/Account.jsx';
 
 const NAV = [
   { to: '/', icon: '🏠', label: 'Trang chủ', end: true },
@@ -38,8 +39,14 @@ export default function App() {
           <span className="brand-dot">D</span> Destination English
         </div>
         <Nav due={due} />
+        <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+          <AccountChip />
+        </div>
       </aside>
       <main className="main">
+        <div className="mobile-account">
+          <AccountChip />
+        </div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/unit/:id" element={<UnitPage />} />
@@ -48,6 +55,7 @@ export default function App() {
           <Route path="/notebook" element={<Notebook />} />
           <Route path="/errors" element={<Errors />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/account" element={<AccountPage />} />
         </Routes>
       </main>
       <nav className="bottom-nav">
