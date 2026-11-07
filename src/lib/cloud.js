@@ -283,12 +283,16 @@ function authMessage(e) {
     'auth/cancelled-popup-request': 'Bạn đã đóng cửa sổ đăng nhập.',
     'auth/unauthorized-domain': 'Tên miền này chưa được cho phép đăng nhập (cần thêm trong Firebase → Authentication → Settings → Authorized domains).',
     'auth/operation-not-allowed': 'Cách đăng nhập này chưa được bật trong Firebase (Authentication → Sign-in method).',
+    'auth/configuration-not-found': 'Đăng nhập chưa được bật trong Firebase (Authentication → Get started).',
   };
   return m[e?.code] || e?.message || 'Không đăng nhập được.';
 }
 
 function dataMessage(e) {
-  if (e?.code === 'permission-denied') return 'Máy chủ từ chối lưu dữ liệu (kiểm tra Firestore Rules).';
+  if (e?.code === 'permission-denied')
+    return /has not been used|disabled/i.test(e.message || '')
+      ? 'Cơ sở dữ liệu Firestore chưa được tạo trong Firebase (Build → Firestore Database → Create database).'
+      : 'Máy chủ từ chối lưu dữ liệu (kiểm tra Firestore Rules).';
   if (e?.code === 'unavailable') return 'Đang ngoại tuyến – dữ liệu sẽ tự đồng bộ khi có mạng.';
   return e?.message || 'Không đồng bộ được.';
 }
