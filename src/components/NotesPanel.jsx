@@ -1,13 +1,24 @@
 // Side panel next to every lesson: jot down new words/collocations (auto-filled and saved
 // to the notebook) plus free-form notes for the unit.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { lookupAndSave } from '../lib/dict';
 import { update, useStore } from '../lib/store';
 import { speak } from '../lib/speech';
 
+const HIDE_KEY = 'destination-notes-hidden'; // desktop: the learner hid the side panel (per device)
+
+function readHidden() {
+  try {
+    return localStorage.getItem(HIDE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 export default function NotesPanel({ unitId }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // phone/tablet drawer
+  const [hidden, setHidden] = useState(readHidden); // desktop side column
   const [text, setText] = useState('');
   const [context, setContext] = useState('');
   const [busy, setBusy] = useState(false);
@@ -30,16 +41,47 @@ export default function NotesPanel({ unitId }) {
     setContext('');
   }
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  function setHide(h) {
+    setHidden(h);
+    try {
+      localStorage.setItem(HIDE_KEY, h ? '1' : '0');
+    } catch {}
+  }
+
+  // Closes the drawer on small screens and hides the side column on desktop.
+  function close() {
+    setOpen(false);
+    setHide(true);
+  }
+
   return (
     <>
-      <button className="notes-fab" onClick={() => setOpen((o) => !o)} title="Ghi chú">
-        {open ? '✕' : '✎'}
-      </button>
-      <aside className={'card notes-panel stack' + (open ? ' open' : '')}>
+      {!open && (
+        <button
+          className={'notes-fab' + (hidden ? ' desk' : '')}
+          onClick={() => {
+            setOpen(true);
+            setHide(false);
+          }}
+          title="Mở ghi chú"
+        >
+          ✎<span className="notes-fab-label">Ghi chú</span>
+        </button>
+      )}
+      {open && <div className="notes-backdrop" onClick={() => setOpen(false)} />}
+      <aside className={'card notes-panel stack' + (open ? ' open' : '') + (hidden ? ' collapsed' : '')}>
         <div className="row">
           <h3 style={{ margin: 0 }}>✎ Ghi chú từ mới</h3>
           <span className="spacer" />
           <Link to="/notebook" className="small">Sổ tay →</Link>
+          <button className="icon-btn" onClick={close} title="Đóng ghi chú (Esc)" aria-label="Đóng ghi chú">✕</button>
         </div>
         <form onSubmit={save} className="stack" style={{ marginTop: 10 }}>
           <input
