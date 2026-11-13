@@ -41,6 +41,8 @@ import u39 from './b1/u39.js';
 import g40 from './b1/g40.js';
 import g41 from './b1/g41.js';
 import u42 from './b1/u42.js';
+import b2g01 from './b2/g01.js';
+import b2u02 from './b2/u02.js';
 
 const b1Units = [
   [1, 'g', 'Present simple, present continuous, stative verbs'],
@@ -94,18 +96,49 @@ const content = { 'b1-u01': g01, 'b1-u02': g02, 'b1-u03': u03, 'b1-u04': g04, 'b
   'b1-u25': g25, 'b1-u26': g26, 'b1-u27': u27, 'b1-u28': g28, 'b1-u29': g29, 'b1-u30': u30,
   'b1-u31': g31, 'b1-u32': g32, 'b1-u33': u33, 'b1-u34': g34, 'b1-u35': g35, 'b1-u36': u36,
   'b1-u37': g37, 'b1-u38': g38, 'b1-u39': u39, 'b1-u40': g40, 'b1-u41': g41, 'b1-u42': u42,
+  'b2-u01': b2g01, 'b2-u02': b2u02,
 };
 
+const b2Units = [
+  [1, 'g', 'Present time: present simple, present continuous, present perfect, stative verbs'],
+  [2, 'v', 'Travel and transport'],
+  [3, 'g', 'Past time: past tenses, would, used to / be/get used to'],
+  [4, 'v', 'Hobbies, sport and games'],
+  [5, 'g', 'Future time / present tenses in time clauses / prepositions of time and place'],
+  [6, 'v', 'Science and technology'],
+  [7, 'g', 'Articles / countable and uncountable nouns / quantifiers'],
+  [8, 'v', 'The media'],
+  [9, 'g', 'Conditionals: zero, first, second, third, mixed, inverted / unless, in case, provided'],
+  [10, 'v', 'People and society'],
+  [11, 'g', 'Comparatives and superlatives / so, such, enough, too'],
+  [12, 'v', 'The law and crime'],
+  [13, 'g', 'Modals: ability, permission, advice, criticism, obligation, certainty'],
+  [14, 'v', 'Health and fitness'],
+  [15, 'g', 'The passive / the causative / direct and indirect objects'],
+  [16, 'v', 'Food and drink'],
+  [17, 'g', '-ing form or infinitive / prefer, would rather, had better / infinitives of purpose'],
+  [18, 'v', 'Education and learning'],
+  [19, 'g', 'Questions / question tags / indirect questions'],
+  [20, 'v', 'Weather and the environment'],
+  [21, 'g', 'Reported speech / reported questions / reporting verbs'],
+  [22, 'v', 'Money and shopping'],
+  [23, 'g', 'Relative clauses / participles'],
+  [24, 'v', 'Entertainment'],
+  [25, 'g', 'Unreal past, wishes / contrast'],
+  [26, 'v', 'Fashion and design'],
+  [27, 'g', 'Inversions / possessives'],
+  [28, 'v', 'Work and business'],
+];
+
+const makeUnits = (book, list) =>
+  list.map(([no, kind, title]) => {
+    const id = `${book}-u${String(no).padStart(2, '0')}`;
+    return { id, no, kind: kind === 'v' ? 'vocab' : 'grammar', title, content: content[id] || null };
+  });
+
 export const books = [
-  {
-    id: 'b1',
-    title: 'Destination B1',
-    units: b1Units.map(([no, kind, title]) => {
-      const id = `b1-u${String(no).padStart(2, '0')}`;
-      return { id, no, kind: kind === 'v' ? 'vocab' : 'grammar', title, content: content[id] || null };
-    }),
-  },
-  { id: 'b2', title: 'Destination B2', units: [], soon: true },
+  { id: 'b1', title: 'Destination B1', units: makeUnits('b1', b1Units) },
+  { id: 'b2', title: 'Destination B2', units: makeUnits('b2', b2Units) },
   { id: 'c1', title: 'Destination C1 & C2', units: [], soon: true },
 ];
 

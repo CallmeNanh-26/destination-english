@@ -9,6 +9,7 @@ export const GROUPS = {
   topic: 'Từ vựng chủ đề',
   phrasal: 'Phrasal verbs',
   prep: 'Cụm giới từ',
+  phrase: 'Cụm từ & collocation',
   wordform: 'Word formation',
   pattern: 'Word patterns',
 };
@@ -35,6 +36,7 @@ export function WordDetail({ v, show = {} }) {
   const rows = [
     on('vi') && v.vi && ['Nghĩa tiếng Việt', v.vi],
     on('en') && v.en && ['Nghĩa tiếng Anh', v.en],
+    on('cmp') && v.cmp && ['Phân biệt (dễ nhầm)', v.cmp],
     on('fam') && v.fam?.length > 0 && ['Từ mở rộng (word family)', v.fam.join(' · ')],
     on('syn') && v.syn?.length > 0 && ['Đồng nghĩa', v.syn.join(', ')],
     on('ant') && v.ant?.length > 0 && ['Trái nghĩa', v.ant.join(', ')],
@@ -205,7 +207,7 @@ export function Flashcards({ unit }) {
       <div className="card stack" style={{ padding: 14 }}>
         <div className="row small">
           <strong>Nhóm:</strong>
-          {Object.entries(GROUPS).map(([g, label]) => (
+          {Object.entries(GROUPS).filter(([g]) => unit.vocab.some((v) => v.g === g)).map(([g, label]) => (
             <span key={g} className={'chip' + (groups.has(g) ? ' on' : '')} onClick={() => { toggleGroup(g); setI(0); }}>
               {label}
             </span>
