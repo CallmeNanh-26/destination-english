@@ -1,0 +1,133 @@
+// B2 Unit 7 – Grammar: articles / countable and uncountable nouns / quantifiers (Destination B2).
+export default {
+  id: 'b2-u07',
+  book: 'b2',
+  no: 7,
+  title: 'Articles, countable/uncountable nouns, quantifiers',
+  titleVi: 'Mạo từ; danh từ đếm được & không đếm được; lượng từ',
+  blocks: [
+    { type: 'h', text: 'Mạo từ không xác định: a / an' },
+    { type: 'p', text: 'Dùng với **danh từ đếm được số ít** khi không xác định cụ thể hoặc khi nhắc đến **lần đầu**: There’s **a** good film on TV tonight.' },
+    { type: 'warn', text: 'Chọn **a/an** theo **âm**, không theo chữ cái:\n✓ **an** hour (h câm) ✗ a hour\n✓ **a** unique experience (/juː/) ✗ an unique\n✓ **an** MP3 player (/em/), **a** university (/juː/), **an** honest man' },
+
+    { type: 'h', text: 'Mạo từ xác định: the' },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Danh từ số ít đã xác định', 'Where’s **the** DVD you were talking about?'],
+      ['Danh từ số ít nói chung (cả một loại)', '**The** radio seemed amazing to people at first.'],
+      ['Danh từ số nhiều đã xác định', 'I didn’t believe **the** rumours about the prime minister.'],
+      ['Danh từ không đếm được đã xác định', 'I followed **the** advice my lawyer gave me.'],
+      ['Thứ duy nhất', '**the** sky, **the** sun, **the** moon, **the** North Pole, **the** World Cup'],
+    ] },
+    { type: 'tip', text: 'Phát âm: **the** /ðə/ trước phụ âm (the media), /ðiː/ trước nguyên âm (the announcer, the editor).' },
+
+    { type: 'h', text: 'Không dùng mạo từ (zero article)' },
+    { type: 'table', head: ['Cách dùng', 'Ví dụ'], rows: [
+      ['Danh từ số nhiều nói chung', '**Journalists** often face dangerous situations.'],
+      ['Danh từ không đếm được nói chung', '**News** travels fast these days.'],
+    ] },
+    { type: 'warn', text: 'Lỗi rất phổ biến của người Việt: thêm **the** khi nói chung chung.\n✗ **The** technology has changed **the** our lives. → ✓ **Technology** has changed our lives.\n✗ I like **the** music. (nói chung) → ✓ I like **music**.' },
+
+    { type: 'h', text: 'Mạo từ trong các cụm cố định' },
+    { type: 'table', head: ['Chủ đề', 'Ví dụ'], rows: [
+      ['Thời gian', 'in **the** 1990s, in (**the**) summer, in **the** morning · in 2008, in June, on Friday, at night'],
+      ['Người & công việc', 'have **a** job, work as **a** … · **the** queen, **the** principal, **the** French · become president, go to work, be at work'],
+      ['Nơi chốn', '**the** Alps, **the** Atlantic, **the** River Thames, **the** Earth, **the** USA, **the** UK · Mount Everest, Paris, America, Oxford Street, Lake Superior'],
+      ['Giải trí', '**the** media, on **the** radio, play **the** guitar, go to **the** cinema · listen to music, on television, play tennis/football'],
+      ['Tổ chức', '**the** army, **the** police, **the** fire brigade'],
+      ['Giáo dục', 'go to **the** school (đến thăm) · go to school (đi học), in Class 3B, maths'],
+      ['Đi lại', 'take **a** taxi, catch **a/the** bus · on **the** bus · on foot, go home, go by bus'],
+      ['Sức khỏe', 'have **a** cold/headache/cough · have (**the**) flu · have toothache'],
+      ['Công trình', '**the** bank, **the** post office, go to **the** hospital (thăm bệnh) · go to hospital/prison/church (với tư cách bệnh nhân, tù nhân, người đi lễ)'],
+    ] },
+
+    { type: 'h', text: 'Danh từ đếm được và không đếm được' },
+    { type: 'table', head: ['Loại', 'Dùng với', 'Ví dụ'], rows: [
+      ['Đếm được', 'a, the, some, many; động từ số ít/nhiều', 'I want to be **a journalist**. How **many channels** do you get?'],
+      ['Không đếm được', 'the, some, much; động từ số ít', '**Some** important **news has** just come in. How **much information** do we have? Your **advice was** very useful.'],
+    ] },
+    { type: 'p', text: 'Danh từ không đếm được thường gặp: **advice, coffee, furniture, glass, hair, homework, information, knowledge, luggage, money, news, paper, work, equipment, research, progress, evidence, traffic**.' },
+    { type: 'warn', text: '• ✗ an advice / advices → ✓ **a piece of** advice / **some** advice\n• Một số danh từ luôn ở số nhiều: clothes, scissors, jeans, trousers, glasses, groceries → My new clothes **are** dirty!\n• Một số danh từ đổi nghĩa: **a glass** (cái cốc) – **glass** (thủy tinh); **a paper** (tờ báo) – **paper** (giấy); **a work** (tác phẩm) – **work** (công việc); **a hair** (một sợi tóc) – **hair** (tóc)' },
+
+    { type: 'h', text: 'Lượng từ (quantifiers)' },
+    { type: 'table', head: ['Lượng từ', 'Dùng với', 'Ví dụ'], rows: [
+      ['many', 'đếm được, chủ yếu phủ định / câu hỏi', 'There aren’t **many** programmes I find interesting.'],
+      ['much', 'không đếm được, chủ yếu phủ định / câu hỏi', 'My dad never shows **much** interest in the news.'],
+      ['a lot of / lots of', 'cả hai, câu khẳng định', 'That film has won **a lot of** awards. What **a lot of** luggage!'],
+      ['a few', 'đếm được = một vài (tích cực)', 'There have been **a few** scandals recently.'],
+      ['a little', 'không đếm được = một chút (tích cực)', 'They say that **a little** knowledge is a dangerous thing.'],
+      ['few', 'đếm được = rất ít (tiêu cực)', 'Richard has **few** interests outside work.'],
+      ['little', 'không đếm được = rất ít (tiêu cực)', 'The police have **little** information about the robbery.'],
+    ] },
+    { type: 'tip', text: '**only a few** = not many; **only a little** = not much: There’s **only a little** sugar left.\nIELTS Writing Task 1: phân biệt **number of** + danh từ đếm được và **amount of** + danh từ không đếm được:\n“The **number of** newspapers sold fell, while the **amount of** time spent online rose.”' },
+  ],
+  exercises: [
+    {
+      title: 'A. Chọn đáp án đúng',
+      instruction: 'Chọn đáp án đúng (— = không cần mạo từ).',
+      items: [
+        { t: 'mcq', q: 'The news is on TV in ___ hour.', o: ['an', 'a', 'the'], a: 0 },
+        { t: 'mcq', q: 'Being in a film was ___ unique experience for me.', o: ['a', 'an', 'the'], a: 0 },
+        { t: 'mcq', q: '___ news travels fast these days.', o: ['—', 'The', 'A'], a: 0 },
+        { t: 'mcq', q: 'Where’s ___ newspaper I bought this morning?', o: ['the', 'a', '—'], a: 0 },
+        { t: 'mcq', q: '___ journalists often face dangerous situations.', o: ['—', 'The', 'A'], a: 0 },
+        { t: 'mcq', q: 'She plays ___ guitar in a band.', o: ['the', 'a', '—'], a: 0 },
+        { t: 'mcq', q: 'I usually listen to ___ music on the bus.', o: ['—', 'the', 'a'], a: 0 },
+        { t: 'mcq', q: 'He was taken to ___ hospital after the accident. (UK, as a patient)', o: ['—', 'a', 'the'], a: 0 },
+        { t: 'mcq', q: 'Can you give me some ___?', o: ['advice', 'advices', 'an advice'], a: 0 },
+        { t: 'mcq', q: 'My new jeans ___ too tight.', o: ['are', 'is'], a: 0 },
+      ],
+    },
+    {
+      title: 'B. Lượng từ',
+      instruction: 'Chọn lượng từ đúng.',
+      items: [
+        { t: 'mcq', q: 'There aren’t ___ good programmes on TV tonight.', o: ['many', 'much'], a: 0 },
+        { t: 'mcq', q: 'How ___ information do we have about the accident?', o: ['much', 'many'], a: 0 },
+        { t: 'mcq', q: 'I’ve got ___ friends coming round tonight – about four.', o: ['a few', 'few'], a: 0 },
+        { t: 'mcq', q: 'Sadly, he has ___ friends and often feels lonely.', o: ['few', 'a few'], a: 0 },
+        { t: 'mcq', q: 'There’s only ___ milk left – can you buy some?', o: ['a little', 'a few'], a: 0 },
+        { t: 'mcq', q: 'The police have ___ evidence, so they can’t arrest anyone.', o: ['little', 'a little'], a: 0 },
+        { t: 'mcq', q: 'The ___ of people reading printed newspapers has fallen.', o: ['number', 'amount'], a: 0 },
+        { t: 'mcq', q: 'The ___ of time people spend online has risen.', o: ['amount', 'number'], a: 0 },
+      ],
+    },
+    {
+      title: 'C. Điền mạo từ',
+      instruction: 'Điền a, an, the hoặc dấu – nếu không cần mạo từ.',
+      items: [
+        { t: 'gap', q: 'My sister works as ___ editor for a magazine.', a: ['an'] },
+        { t: 'gap', q: '___ Internet has changed the way we get news.', a: ['The', 'the'] },
+        { t: 'gap', q: 'I’ve got ___ terrible headache.', a: ['a'] },
+        { t: 'gap', q: 'We went to Paris in ___ summer of 2019.', a: ['the'] },
+        { t: 'gap', q: 'He wants to become ___ president one day.', a: ['-', '–', '—'] },
+        { t: 'gap', q: 'Mount Everest is in ___ Himalayas.', a: ['the'] },
+        { t: 'gap', q: 'I usually go to work by ___ bus.', a: ['-', '–', '—'] },
+        { t: 'gap', q: 'Have you ever seen ___ Atlantic Ocean?', a: ['the'] },
+      ],
+    },
+    {
+      title: 'D. Sửa lỗi sai',
+      instruction: 'Mỗi câu có một lỗi. Viết lại câu đúng.',
+      items: [
+        { t: 'fix', q: 'The technology has changed our lives.', a: ['Technology has changed our lives.'] },
+        { t: 'fix', q: 'She gave me some useful advices.', a: ['She gave me some useful advice.'] },
+        { t: 'fix', q: 'How many luggage have you got?', a: ['How much luggage have you got?', 'How much luggage do you have?'] },
+        { t: 'fix', q: 'The news are very bad today.', a: ['The news is very bad today.'] },
+        { t: 'fix', q: 'I need an information about the course.', a: ['I need some information about the course.', 'I need a piece of information about the course.', 'I need information about the course.'] },
+        { t: 'fix', q: 'We bought some new furnitures for the living room.', a: ['We bought some new furniture for the living room.'] },
+      ],
+    },
+    {
+      title: 'E. Dịch câu Việt → Anh (AI chấm)',
+      instruction: 'Chú ý mạo từ và danh từ không đếm được.',
+      items: [
+        { t: 'tr', vi: 'Mạng xã hội đã thay đổi cách mọi người tiếp nhận tin tức.', ref: 'Social media has changed the way people get news.', focus: 'zero article + news (uncountable)' },
+        { t: 'tr', vi: 'Thầy giáo cho tôi một lời khuyên rất hữu ích.', ref: 'My teacher gave me a very useful piece of advice.', focus: 'a piece of advice' },
+        { t: 'tr', vi: 'Số lượng người đọc báo giấy đã giảm mạnh.', ref: 'The number of people reading printed newspapers has fallen sharply.', focus: 'the number of (IELTS Task 1)' },
+        { t: 'tr', vi: 'Có rất ít bằng chứng cho thấy trò chơi điện tử gây ra bạo lực.', ref: 'There is little evidence that video games cause violence.', focus: 'little + uncountable' },
+        { t: 'tr', vi: 'Nhà báo thường phải đối mặt với những tình huống nguy hiểm.', ref: 'Journalists often face dangerous situations.', focus: 'zero article – general plural' },
+        { t: 'tr', vi: 'Tôi chỉ có một ít thời gian, nên hãy nói ngắn gọn.', ref: 'I only have a little time, so please be brief.', focus: 'a little' },
+      ],
+    },
+  ],
+};

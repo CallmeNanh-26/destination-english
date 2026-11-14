@@ -47,6 +47,12 @@ import b2g03 from './b2/g03.js';
 import b2u04 from './b2/u04.js';
 import b2g05 from './b2/g05.js';
 import b2u06 from './b2/u06.js';
+import b2g07 from './b2/g07.js';
+import b2u08 from './b2/u08.js';
+import b2g09 from './b2/g09.js';
+import b2u10 from './b2/u10.js';
+import b2g11 from './b2/g11.js';
+import b2u12 from './b2/u12.js';
 
 const b1Units = [
   [1, 'g', 'Present simple, present continuous, stative verbs'],
@@ -100,7 +106,7 @@ const content = { 'b1-u01': g01, 'b1-u02': g02, 'b1-u03': u03, 'b1-u04': g04, 'b
   'b1-u25': g25, 'b1-u26': g26, 'b1-u27': u27, 'b1-u28': g28, 'b1-u29': g29, 'b1-u30': u30,
   'b1-u31': g31, 'b1-u32': g32, 'b1-u33': u33, 'b1-u34': g34, 'b1-u35': g35, 'b1-u36': u36,
   'b1-u37': g37, 'b1-u38': g38, 'b1-u39': u39, 'b1-u40': g40, 'b1-u41': g41, 'b1-u42': u42,
-  'b2-u01': b2g01, 'b2-u02': b2u02, 'b2-u03': b2g03, 'b2-u04': b2u04, 'b2-u05': b2g05, 'b2-u06': b2u06,
+  'b2-u01': b2g01, 'b2-u02': b2u02, 'b2-u03': b2g03, 'b2-u04': b2u04, 'b2-u05': b2g05, 'b2-u06': b2u06, 'b2-u07': b2g07, 'b2-u08': b2u08, 'b2-u09': b2g09, 'b2-u10': b2u10, 'b2-u11': b2g11, 'b2-u12': b2u12,
 };
 
 const b2Units = [
