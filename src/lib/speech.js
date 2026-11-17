@@ -29,11 +29,24 @@ export async function startRecording() {
         rec.onstop = async () => {
           stream.getTracks().forEach((t) => t.stop());
           const blob = new Blob(chunks, { type: rec.mimeType });
-          resolve({ blob, url: URL.createObjectURL(blob), wav: await toWavBase64(blob) });
+          const wav = await toWavBase64(blob);
+          // The browser's own compressed recording (Opus/AAC) is far smaller than WAV, so it uploads in a moment;
+          // the WAV copy is sent only if Gemini refuses the compressed format.
+          const mime = (rec.mimeType || '').split(';')[0];
+          const small = mime ? { mime, base64: await blobBase64(blob), fallback: wav } : wav;
+          resolve({ blob, url: URL.createObjectURL(blob), wav: small });
         };
         rec.stop();
       }),
   };
+}
+
+function blobBase64(blob) {
+  return new Promise((resolve) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result).split(',')[1] || '');
+    r.readAsDataURL(blob);
+  });
 }
 
 // Re-encode whatever the browser recorded (webm/mp4) as 16 kHz mono WAV, a format Gemini always accepts.

@@ -15,14 +15,15 @@ let lastGood; // model that answered most recently in this session; tried first 
 const slowUntil = {}; // model -> ms
 const noThinkingConfig = new Set(); // models that reject the thinking setting
 
-// Text requests should be quick; audio needs time to upload and listen to the clip.
-const timeoutFor = (audio) => (audio ? 60000 + Math.min(60000, (audio.base64.length / 1e6) * 15000) : 40000);
+// Requests with small outputs answer in seconds; a model that needs longer is stuck, so move on.
+const timeoutFor = (audio) => (audio ? 35000 + Math.min(25000, (audio.base64.length / 1e6) * 10000) : 40000);
 
 export async function askGemini(prompt, opts = {}) {
   const { geminiKey, model } = getState().settings;
   if (!geminiKey) throw new Error('Chưa có Gemini API key. Vào mục Cài đặt để thêm key.');
   const now = Date.now();
-  let models = [...new Set([lastGood, model || 'gemini-flash-latest', ...FALLBACK_MODELS].filter(Boolean))];
+  // `prefer` puts specific models first (e.g. light models for a simple listening task).
+  let models = [...new Set([...(opts.prefer || []), lastGood, model || 'gemini-flash-latest', ...FALLBACK_MODELS].filter(Boolean))];
   models = [...models.filter((m) => !(slowUntil[m] > now)), ...models.filter((m) => slowUntil[m] > now)];
   let lastError;
   let timeouts = 0;
@@ -33,7 +34,7 @@ export async function askGemini(prompt, opts = {}) {
     try {
       opts.onStatus?.(timeouts ? 'Mô hình chính chậm, đang chuyển sang mô hình nhanh hơn…' : '');
       const out = await callModel(m, geminiKey, prompt, opts);
-      lastGood = m;
+      if (!opts.prefer) lastGood = m;
       return out;
     } catch (e) {
       lastError = e;
@@ -65,7 +66,11 @@ async function callModel(model, geminiKey, prompt, opts) {
     // Some models do not accept the thinking setting: remember that and ask again without it.
     if (e.status === 400 && /thinking/i.test(e.message) && !noThinkingConfig.has(model)) {
       noThinkingConfig.add(model);
-      return callModelOnce(model, geminiKey, prompt, opts);
+      return callModel(model, geminiKey, prompt, opts);
+    }
+    // The compressed recording format was refused: send the (larger) WAV copy instead.
+    if (e.status === 400 && opts.audio?.fallback) {
+      return callModel(model, geminiKey, prompt, { ...opts, audio: opts.audio.fallback });
     }
     throw e;
   }
@@ -136,10 +141,36 @@ Return JSON:
  "tip": "một mẹo ngắn bằng tiếng Việt"}`);
 }
 
-export function gradeSpeaking({ topic, question, answer, audio, mode, onStatus }) {
+// Step 1 for voice answers: a light model only listens (transcript + pronunciation notes), which is quick.
+// Step 2 grades the transcript as text, which avoids one slow request with both audio and a long answer.
+export async function gradeSpeaking({ topic, question, answer, audio, mode, onStatus }) {
+  if (mode !== 'voice') return gradeSpeakingText({ topic, question, answer, mode, onStatus });
+  const step = (n, text) => (s) => onStatus?.(s ? `Bước ${n}/2: ${s}` : `Bước ${n}/2: ${text}`);
+  const heard = await askGemini(
+    `Listen to this English speaking answer by a Vietnamese learner (question: "${question}").
+Transcribe exactly what they said, keeping their grammar mistakes, hesitations like "uh" and repeated words.
+Then give short notes in Vietnamese on pronunciation (final sounds, word stress, intonation, specific mispronounced words) and fluency (pauses, speed).
+Return JSON: {"transcript": "...", "pronunciation": "...", "fluency": "..."}`,
+    { audio, schema: HEARD_SCHEMA, prefer: FAST_MODELS, onStatus: step(1, 'AI đang nghe bài nói…') },
+  );
+  const r = await gradeSpeakingText({
+    topic,
+    question,
+    answer: heard.transcript,
+    mode,
+    heard,
+    onStatus: step(2, 'AI đang chấm và viết gợi ý…'),
+  });
+  return { ...r, transcript: heard.transcript, criteria: { ...r.criteria, pronunciation: heard.pronunciation } };
+}
+
+function gradeSpeakingText({ topic, question, answer, mode, heard, onStatus }) {
+  onStatus?.('');
   const source =
     mode === 'voice'
-      ? 'The learner answered by voice (audio attached). First transcribe exactly what they said (keep their mistakes), then evaluate it. Also comment on pronunciation, stress, intonation and fluency based on the audio.'
+      ? `The learner answered by voice. Transcript (with their mistakes): """${answer}"""
+Pronunciation notes from the recording: ${heard.pronunciation}
+Fluency notes from the recording: ${heard.fluency}`
       : `The learner wrote this answer: """${answer}"""`;
   return askGemini(
     `${TUTOR}
@@ -159,7 +190,7 @@ Return JSON:
 Make 3-4 drills that target exactly the learner's mistakes and weak points. If there are no mistakes, drill the upgrades.
 Give 3-5 upgrades. Every upgrade MUST have a non-empty "better" written in English (never leave it blank).
 Keep every Vietnamese explanation short (one sentence).`,
-    { audio, schema: SPEAKING_SCHEMA, onStatus },
+    { schema: SPEAKING_SCHEMA, onStatus },
   );
 }
 
@@ -178,6 +209,8 @@ const SPEAKING_SCHEMA = obj({
   key_phrases: strList,
   drills: { type: 'ARRAY', items: obj({ t: { type: 'STRING', enum: ['gap', 'rewrite'] }, q: str, answer: strList, explain: str }) },
 });
+
+const HEARD_SCHEMA = obj({ transcript: str, pronunciation: str, fluency: str });
 
 const TASKS_SCHEMA = {
   type: 'ARRAY',
