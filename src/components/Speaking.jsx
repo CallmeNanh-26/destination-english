@@ -86,6 +86,8 @@ function Answer({ mode, onResult, question, topic, isLong }) {
   const [secs, setSecs] = useState(0);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
+  const [status, setStatus] = useState('');
+  const [wait, setWait] = useState(0);
   const timer = useRef();
 
   useEffect(() => () => clearInterval(timer.current), []);
@@ -112,6 +114,10 @@ function Answer({ mode, onResult, question, topic, isLong }) {
   async function submit() {
     setBusy(true);
     setErr('');
+    setStatus('');
+    setWait(0);
+    const started = Date.now();
+    const tick = setInterval(() => setWait(Math.round((Date.now() - started) / 1000)), 1000);
     try {
       const r = await gradeSpeaking({
         topic,
@@ -119,13 +125,16 @@ function Answer({ mode, onResult, question, topic, isLong }) {
         answer: text,
         audio: mode === 'voice' ? clip.wav : undefined,
         mode,
+        onStatus: setStatus,
       });
+      clearInterval(tick);
       onResult(r);
       setText('');
       setClip(null);
     } catch (e) {
       setErr(e.message);
     } finally {
+      clearInterval(tick);
       setBusy(false);
     }
   }
@@ -161,8 +170,13 @@ function Answer({ mode, onResult, question, topic, isLong }) {
           disabled={busy || !hasKey() || (mode === 'voice' ? !clip : text.trim().split(/\s+/).length < 5)}
           onClick={submit}
         >
-          {busy ? 'AI đang phân tích…' : '✨ Gửi để AI chấm & sửa'}
+          {busy ? `AI đang phân tích… ${wait}s` : err ? '🔄 Gửi lại' : '✨ Gửi để AI chấm & sửa'}
         </button>
+        {busy && (
+          <span className="muted small">
+            {status || (mode === 'voice' ? 'Bài nói thường mất 15–40 giây để chấm.' : 'Thường mất 10–20 giây.')}
+          </span>
+        )}
       </div>
       {err && <div className="alert bad">{err}</div>}
     </div>

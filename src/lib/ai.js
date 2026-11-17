@@ -7,36 +7,76 @@ export function hasKey() {
 
 // Tried in order after the model chosen in Settings when Google answers "overloaded", "quota" or "not found".
 const FALLBACK_MODELS = ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite'];
+// Light models answer fastest; used straight away once a model has been too slow.
+const FAST_MODELS = ['gemini-flash-lite-latest', 'gemini-2.5-flash-lite'];
 const RETRYABLE = [404, 429, 500, 503, 'timeout'];
-const TIMEOUT_MS = 45000;
+const SLOW_FOR_MS = 10 * 60000; // skip a model that timed out for this long
 let lastGood; // model that answered most recently in this session; tried first next time
+const slowUntil = {}; // model -> ms
+const noThinkingConfig = new Set(); // models that reject the thinking setting
+
+// Text requests should be quick; audio needs time to upload and listen to the clip.
+const timeoutFor = (audio) => (audio ? 60000 + Math.min(60000, (audio.base64.length / 1e6) * 15000) : 40000);
 
 export async function askGemini(prompt, opts = {}) {
   const { geminiKey, model } = getState().settings;
   if (!geminiKey) throw new Error('Chưa có Gemini API key. Vào mục Cài đặt để thêm key.');
-  const models = [...new Set([lastGood, model || 'gemini-flash-latest', ...FALLBACK_MODELS].filter(Boolean))];
+  const now = Date.now();
+  let models = [...new Set([lastGood, model || 'gemini-flash-latest', ...FALLBACK_MODELS].filter(Boolean))];
+  models = [...models.filter((m) => !(slowUntil[m] > now)), ...models.filter((m) => slowUntil[m] > now)];
   let lastError;
+  let timeouts = 0;
   for (const m of models) {
+    // After a timeout, only a light model is worth waiting for; give up after two slow attempts.
+    if (timeouts && !FAST_MODELS.includes(m)) continue;
+    if (timeouts >= 2) break;
     try {
+      opts.onStatus?.(timeouts ? 'Mô hình chính chậm, đang chuyển sang mô hình nhanh hơn…' : '');
       const out = await callModel(m, geminiKey, prompt, opts);
       lastGood = m;
       return out;
     } catch (e) {
       lastError = e;
       if (!RETRYABLE.includes(e.status)) throw e;
+      if (e.status === 'timeout') {
+        timeouts++;
+        slowUntil[m] = Date.now() + SLOW_FOR_MS;
+        if (lastGood === m) lastGood = undefined;
+      }
     }
   }
   if (lastError.status === 429) throw new Error('Đã chạm giới hạn miễn phí của Gemini, thử lại sau ít phút.');
-  if (lastError.status === 'timeout') throw lastError;
+  if (lastError.status === 'timeout')
+    throw new Error('Gemini đang chậm, hãy bấm gửi lại. Mẹo: câu trả lời nói dưới 1 phút sẽ được chấm nhanh hơn.');
   throw new Error('Gemini đang quá tải, hãy thử lại sau ít phút.');
 }
 
-async function callModel(model, geminiKey, prompt, { audio, json = true, schema }) {
+// Thinking makes answers slower; grading does not need it.
+function thinkingFor(model) {
+  if (noThinkingConfig.has(model) || /pro/.test(model)) return {};
+  if (/2\.5/.test(model)) return { thinkingConfig: { thinkingBudget: 0 } };
+  return { thinkingConfig: { thinkingLevel: 'low' } };
+}
+
+async function callModel(model, geminiKey, prompt, opts) {
+  try {
+    return await callModelOnce(model, geminiKey, prompt, opts);
+  } catch (e) {
+    // Some models do not accept the thinking setting: remember that and ask again without it.
+    if (e.status === 400 && /thinking/i.test(e.message) && !noThinkingConfig.has(model)) {
+      noThinkingConfig.add(model);
+      return callModelOnce(model, geminiKey, prompt, opts);
+    }
+    throw e;
+  }
+}
+
+async function callModelOnce(model, geminiKey, prompt, { audio, json = true, schema }) {
   const parts = [{ text: prompt }];
   if (audio) parts.push({ inline_data: { mime_type: audio.mime, data: audio.base64 } });
   const base = import.meta.env.DEV ? '/gemini-api' : 'https://generativelanguage.googleapis.com';
   const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => ctl.abort(), timeoutFor(audio));
   const res = await fetch(
     `${base}/v1beta/models/${encodeURIComponent(model)}:generateContent`,
     {
@@ -47,6 +87,7 @@ async function callModel(model, geminiKey, prompt, { audio, json = true, schema 
         contents: [{ role: 'user', parts }],
         generationConfig: {
           temperature: 0.4,
+          ...thinkingFor(model),
           ...(json ? { responseMimeType: 'application/json' } : {}),
           ...(schema ? { responseSchema: schema } : {}),
         },
@@ -95,7 +136,7 @@ Return JSON:
  "tip": "một mẹo ngắn bằng tiếng Việt"}`);
 }
 
-export function gradeSpeaking({ topic, question, answer, audio, mode }) {
+export function gradeSpeaking({ topic, question, answer, audio, mode, onStatus }) {
   const source =
     mode === 'voice'
       ? 'The learner answered by voice (audio attached). First transcribe exactly what they said (keep their mistakes), then evaluate it. Also comment on pronunciation, stress, intonation and fluency based on the audio.'
@@ -115,9 +156,10 @@ Return JSON:
  "model_answer": "a natural band 7.5-8 answer to the same question, 4-7 sentences, reusing the learner's ideas",
  "key_phrases": ["useful band 7+ phrases/collocations from the model answer"],
  "drills": [{"t": "gap" | "rewrite", "q": "exercise sentence; use ___ for the gap", "answer": ["accepted answer"], "explain": "giải thích tiếng Việt"}]}
-Make 4-6 drills that target exactly the learner's mistakes and weak points. If there are no mistakes, drill the upgrades.
-Give 3-5 upgrades. Every upgrade MUST have a non-empty "better" written in English (never leave it blank).`,
-    { audio, schema: SPEAKING_SCHEMA },
+Make 3-4 drills that target exactly the learner's mistakes and weak points. If there are no mistakes, drill the upgrades.
+Give 3-5 upgrades. Every upgrade MUST have a non-empty "better" written in English (never leave it blank).
+Keep every Vietnamese explanation short (one sentence).`,
+    { audio, schema: SPEAKING_SCHEMA, onStatus },
   );
 }
 
